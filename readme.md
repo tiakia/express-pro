@@ -1,23 +1,25 @@
 
-模块划分
-  根据功能进行模块划分
+#### 模块划分
+  ##### 根据功能进行模块划分
           前台模块
           后台管理模块
           API模块
   使用app.use()进行模块划分
 
-前台路由＋模板
-main模块
-  /      首页
-  /view  内容页
+#### 前台路由＋模板
+```
+main模块  
+  /      首页  
+  /view  内容页  
 api模块
   /                首页
   /register        用户注册
   /login           用户登录
   /comment         评论获取
   /comment/post    评论提交
-
-后台路由＋模板
+```
+#### 后台路由＋模板
+```
 admin模块
      /                首页
   用户管理
@@ -35,7 +37,7 @@ admin模块
   评论内容管理
     /comment          评论列表
     /comment/delete   评论删除
-
+```
 Mongdb 使用 mongoose.Schema 创建表结构对象
 使用 mongoos.model() 创建模型类用于对数据表的操作
 ```
