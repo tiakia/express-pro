@@ -1,0 +1,72 @@
+*{
+    box-sizing: border-box;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+em,
+img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+a:hover {
+    text-decoration: none;
+    color: red;
+    cursor: pointer;
+}
+
+input,
+button,
+select,
+textarea {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+header,
+main,
+section,
+article,
+footer,
+details,
+summary {
+    margin-bottom: 10px;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.flex{
+    display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -o-flex;
+    align-items: center;
+    justify-content: center;
+}
