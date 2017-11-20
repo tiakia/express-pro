@@ -1,0 +1,81 @@
+body{
+    background-color: #ddd;
+}
+/* 导航拦 */
+header{
+    background-color: rgba(0,0,0,.5);
+    width: 100%;
+    height: 100px;
+    margin:{
+        bottom: 0;
+    }
+    h1 {
+        color: #fff;
+    }
+}
+nav{
+    background-color: #fff;
+    text-align: center;
+    height: 50px;
+    ul{
+        li{
+            a{
+                    display: inline-block;
+                    height: 50px;
+                    line-height: 50px;
+                    border-bottom:{
+                        width: 2px;
+                        style: solid;
+                        color: transparent;
+                    }
+                    padding:{
+                        left: 20px;
+                        right: 20px;
+                    }
+                    &:hover{
+                        border-bottom: {
+                            color: orange;
+                            cursor: pointer;
+                        }
+                    }
+            }
+        }
+    }
+}
+
+#app{
+    width: 1200px;
+    margin:{
+        top: 10px;
+        left: auto;
+        right: auto;
+        bottom: 0;
+    }
+    overflow: hidden;
+    /* 主体部分布局 */
+    main{
+          width: 67%;
+          height: 500px;
+          padding:{
+              left: 10px;
+              right: 10px;
+          };
+    }
+    /* 侧栏部分布局 */
+    aside{
+        width: 30%;
+        height: 500px;
+    }
+}
+
+article.item{
+    background-color: #fff;
+    padding: 10px 15px;
+    border:{
+        radius: 5px;
+        width: 1px;
+        style: solid;
+        color: #000;
+    }
+    min-height: 100px;
+}

@@ -52,3 +52,8 @@ small.save(function(err){
     //saved
 });
 ```
+
+#### webpack
+静态文件都放在 public 文件夹内，html文件放在 view 文件夹内  
+路由使用 express 自带的路由  
+水平有限，现在的做法就是先把 public 文件夹里面的静态资源打包然后引用给 views 文件夹里的html  

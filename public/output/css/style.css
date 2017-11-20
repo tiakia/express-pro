@@ -1,0 +1,135 @@
+/*! Author: tiankai */
+*{
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+em,
+img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+a:hover {
+    text-decoration: none;
+    color: red;
+    cursor: pointer;
+}
+
+input,
+button,
+select,
+textarea {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+header,
+main,
+section,
+article,
+footer,
+details,
+summary {
+    margin-bottom: 10px;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.flex{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -moz-flex;
+    display: -o-flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+}
+@charset "UTF-8";
+body {
+  background-color: #ddd; }
+
+/* 导航拦 */
+header {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100px;
+  margin-bottom: 0; }
+  header h1 {
+    color: #fff; }
+
+nav {
+  background-color: #fff;
+  text-align: center;
+  height: 50px; }
+  nav ul li a {
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    padding-left: 20px;
+    padding-right: 20px; }
+    nav ul li a:hover {
+      border-bottom-color: orange;
+      border-bottom-cursor: pointer; }
+
+#app {
+  width: 1200px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+  overflow: hidden;
+  /* 主体部分布局 */
+  /* 侧栏部分布局 */ }
+  #app main {
+    width: 67%;
+    height: 500px;
+    padding-left: 10px;
+    padding-right: 10px; }
+  #app aside {
+    width: 30%;
+    height: 500px; }
+
+article.item {
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #000;
+  min-height: 100px; }

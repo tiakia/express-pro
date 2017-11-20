@@ -47,7 +47,7 @@ var app = express();
 //设置静态文件托管 html css image
 // 当用户访问的url以/public开始，直接返回对应的__dirname + '/public'下的文件
 
-app.use('/public', express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public/'));
 
 // 配置应用模板
 // 定义当前应用所使用的模板引擎
