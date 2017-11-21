@@ -1,6 +1,16 @@
 body{
     background-color: #ddd;
 }
+
+@mixin split($top:0,$right:0,$bottom:0,$left:0){
+    margin:{
+        top: $top;
+        right: $right;
+        bottom: $bottom;
+        left: $left;
+    }
+}
+
 /* 导航拦 */
 header{
     background-color: rgba(0,0,0,.5);
@@ -70,12 +80,153 @@ nav{
 
 article.item{
     background-color: #fff;
-    padding: 10px 15px;
+    padding:{
+        top: 20px;
+        right: 30px;
+        bottom: 20px;
+        left: 30px;
+    }
     border:{
         radius: 5px;
-        width: 1px;
-        style: solid;
-        color: #000;
     }
     min-height: 100px;
+    .title {
+        span{
+            font:{
+                size: 18px;
+                weight: bold;
+            }
+        }
+        @include split(15px,0,15px,0);
+    }
+    .article-info{
+        margin:{
+            top: 10px;
+            bottom: 10px;
+        }
+        .color{
+            color: lightseagreen;
+            margin:{
+                right: 5px;
+            }
+        }
+
+    }
+    .summary{
+        font:{
+           size: 18px;
+           weight: bold;
+        }
+        @include split(15px,0,15px,0);
+     }
+     .read-more{
+        padding:{
+            top: 5px;
+            right: 10px;
+            bottom: 5px;
+            left: 10px;
+        }
+        background:{
+            color: orange;
+        }
+        color: #fff;
+        outline: none;
+    }
+}
+
+.aside-item {
+    border:{
+        radius: 5px;
+    }
+    &:after{
+        display: table;
+        clear: both;
+        content: '';
+    }
+    background:{
+        color: #fff;
+    }
+    padding:{
+        top: 15px;
+        right: 15px;
+        bottom: 15px;
+        left: 15px;
+    }
+    .item-title {
+        margin:{
+             bottom: 15px;
+        }
+        span {
+             font:{
+                 size: 20px;
+                 weight: bold;
+             }
+             display: inline-block;
+             border-bottom:{
+                 width: 2px;
+                 style: solid;
+                    color: orange;
+                 }
+                 padding:{
+                    bottom: 5px;
+                 }
+             }
+    }
+    .input-con {
+        margin:{
+            bottom: 8px;
+        }
+        label{
+            display: inline-block;
+            width: 20%;
+            text-align: left;
+        }
+        input{
+            width: 78%;
+            border:{
+                width: 1px;
+                style: solid;
+                color: #000;
+                radius: 3px;
+            }
+            padding:{
+                top: 5px;
+                left: 10px;
+                bottom: 5px;
+            }
+            margin:{
+                left: 5px;
+                bottom: 8px;
+            }
+            outline: none;
+        }
+    }
+    .btn{
+        float: right;
+        background:{
+            color: orange;
+        }
+        padding:{
+            top: 8px;
+            bottom: 8px;
+        }
+        width: 80%;
+        color: #fff;
+        border:{
+            radius: 5px;
+        }
+        margin:{
+            top: 5px;
+            bottom: 10px;
+        }
+        outline: none;
+    }
+    .item-bottom{
+        a{
+            color: lightseagreen;
+            margin:{
+                left: 5px;
+            }
+        }
+    }
 }

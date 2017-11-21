@@ -127,9 +127,92 @@ nav {
 
 article.item {
   background-color: #fff;
-  padding: 10px 15px;
+  padding-top: 20px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+  padding-left: 30px;
   border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #000;
   min-height: 100px; }
+  article.item .title {
+    margin-top: 15px;
+    margin-right: 0;
+    margin-bottom: 15px;
+    margin-left: 0; }
+    article.item .title span {
+      font-size: 18px;
+      font-weight: bold; }
+  article.item .article-info {
+    margin-top: 10px;
+    margin-bottom: 10px; }
+    article.item .article-info .color {
+      color: lightseagreen;
+      margin-right: 5px; }
+  article.item .summary {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-right: 0;
+    margin-bottom: 15px;
+    margin-left: 0; }
+  article.item .read-more {
+    padding-top: 5px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    background-color: orange;
+    color: #fff;
+    outline: none; }
+
+.aside-item {
+  border-radius: 5px;
+  background-color: #fff;
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px; }
+  .aside-item:after {
+    display: table;
+    clear: both;
+    content: ''; }
+  .aside-item .item-title {
+    margin-bottom: 15px; }
+    .aside-item .item-title span {
+      font-size: 20px;
+      font-weight: bold;
+      display: inline-block;
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+      border-bottom-color: orange;
+      padding-bottom: 5px; }
+  .aside-item .input-con {
+    margin-bottom: 8px; }
+    .aside-item .input-con label {
+      display: inline-block;
+      width: 20%;
+      text-align: left; }
+    .aside-item .input-con input {
+      width: 78%;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #000;
+      border-radius: 3px;
+      padding-top: 5px;
+      padding-left: 10px;
+      padding-bottom: 5px;
+      margin-left: 5px;
+      margin-bottom: 8px;
+      outline: none; }
+  .aside-item .btn {
+    float: right;
+    background-color: orange;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 80%;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    outline: none; }
+  .aside-item .item-bottom a {
+    color: lightseagreen;
+    margin-left: 5px; }

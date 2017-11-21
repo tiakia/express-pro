@@ -1,4 +1,6 @@
 import React,{ Component } from 'react';
+import Main from './Main';
+import Aside from './Aside';
 
 const title = "欢迎光临我的博客，I'm from REACT";
 
@@ -26,6 +28,10 @@ export default class Blog extends Component {
         <div>
         <Header title={this.state.title}/>
         <Nav nav={this.state.nav}/>
+        <div id="app" >
+          <Main/>
+          <Aside/>
+        </div>
         </div>
     )
   }
@@ -54,7 +60,7 @@ class Nav extends Component {
           <ul className="flex" >
              {
                this.props.nav.map((val, idx) => {
-                 return <li key={val}><a href={val.link} >{val.text}</a></li>
+                 return <li key={idx}><a href={val.link} >{val.text}</a></li>
                })
              }
           </ul>
