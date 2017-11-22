@@ -41,6 +41,7 @@ admin模块
 var express = require('express');
 var swig = require('swig');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 var app = express();
 
@@ -67,6 +68,10 @@ app.set('view engine', 'html');
 // 在开发过程中取消模板缓冲
 
 swig.setDefaults({cache: false});
+
+//bodyParser 设置
+app.use( bodyParser.urlencoded({extended: true}));
+app.use( bodyParser.json());
 
 // 划分模块
 

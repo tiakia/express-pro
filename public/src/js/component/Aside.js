@@ -5,16 +5,28 @@ export default class Aside extends Component{
     super(props);
     this.state ={
       mode: 'login',
-      userName: '',
-      password: '',
-      confirmPassword: ''
+      form: {
+        userName: {
+          value: '',
+          error: ''
+        },
+        password: {
+          value: '',
+          error: ''
+        },
+        confirmPassword: {
+          value: '',
+          error: ''
+        }
+      }
     }
     this.handleMode = this.handleMode.bind(this);
-    this.handleUsername = this.handleUsername.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
-    this.handleConfirm = this.handleConfirm.bind(this);               
+    this.handleValChange = this.handleValChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
+    this.validateUserName = this.validateUserName.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
+    this.validateConfirm = this.validateConfirm.bind(this);
   }
   handleMode(){
     this.setState((prevState) => {
@@ -22,20 +34,81 @@ export default class Aside extends Component{
       return bool ? {mode: "register"} : {mode: "login"};
     });
   }
-  handleUsername(e){
-     this.setState({userName: e.target.value}); 
+  //验证数据
+  handleValChange(e,name){
+    let formData = this.state.form,
+        targetVal = e.target.value;
+    switch(name){
+      case 'userName' :
+        this.validateUserName(targetVal,formData);
+        break;
+      case 'password' :
+        this.validatePassword(targetVal,formData);
+        break;
+      case 'confirmPassword' :
+        this.validateConfirm(targetVal,formData);
+        break;
+    }
+    console.log(formData);
+    this.setState({
+      formData: formData
+    });
+    for(let key in formData){
+      if(formData[key].error.length != 0){
+        alert(formData[key].error);
+      }
+    }
   }
-  handlePassword(e){
-     this.setState({password: e.target.value});
+  validateUserName(val,formData){
+    if(val === ""){
+      formData.userName.error = "用户名不能为空";
+    }else{
+      formData.userName.error = "";
+      formData.userName.value = val;
+    }
+    return formData;
   }
-  handleConfirm(e){
-     this.setState({confirmPassword: e.target.value});    
+  validatePassword(val,formData){
+    if(/^\w{6,8}$/.test(val)){
+      formData.password.error = '';
+      formData.password.value = val;
+    }else{
+      formData.password.value = val;
+      formData.password.error = '密码是6-8位，由数字字母下划线组成';
+    }
+    return formData;
+  }
+  validateConfirm(val,formData){
+    if(/^\w{6,8}$/.test(val) && val === formData.password.value){
+      formData.confirmPassword.value = val;
+      formData.confirmPassword.error = '';
+    }else{
+      formData.confirmPassword.value = val;
+      formData.confirmPassword.error = "俩次输入密码不一致";
+    }
+    return formData;
   }
   handleLogin(){
     console.log("登录中。。。");
   }
   handleRegister(){
-    console.log("注册中。。。");    
+
+    const data = JSON.stringify({
+      username: this.state.userName,
+      password: this.state.password,
+      confirmpassword: this.state.confirmPassword
+    });
+
+    fetch('/api/user/register',{
+      method: "POST",
+      mode: "cors",
+      headers:{
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      },
+      body: data
+    }).then(response => console.log(response))
+      .catch(err => console.error(err));
   }
   render(){
     return(
@@ -43,15 +116,15 @@ export default class Aside extends Component{
           {
             this.state.mode === 'login'?
               <Login changeMode = {this.handleMode}
-                     usernameChange = {this.handleUsername}
-                     passwordChange = {this.handlePassword}
+                     usernameChange = {(e) => this.handleValChange(e,'userName')}
+                     passwordChange = {(e) => this.handleValChange(e, 'password')}
                      loginFun = {this.handleLogin}
               /> :
             this.state.mode === 'register'?              
               <Register changeMode={this.handleMode}
-                     usernameChange = {this.handleUsername}
-                     passwordChange = {this.handlePassword}
-                     confirmPasswordChange = {this.handleConfirm}
+                     usernameChange = {(e) => this.handleValChange(e,'userName')}
+                     passwordChange = {(e) => this.handleValChange(e,'password')}
+                     confirmPasswordChange = {(e) => this.handleValChange(e,'confirmPassword')}
                      registerFun = {this.handleRegister}
               /> :
             null
@@ -143,7 +216,7 @@ class Input extends Component{
         <label>{this.props.labelName}</label>
         <input type={this.props.inputType}
                name={this.props.inputName}
-               onChange={(e) => this.props.handleChange(e) }
+               onBlur={(e) => this.props.handleChange(e) }
         />
         </div>
     )

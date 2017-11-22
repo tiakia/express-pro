@@ -57,3 +57,46 @@ small.save(function(err){
 静态文件都放在 public 文件夹内，html文件放在 view 文件夹内  
 路由使用 express 自带的路由  
 水平有限，现在的做法就是先把 public 文件夹里面的静态资源打包然后引用给 views 文件夹里的html  
+
+#### 使用fetch做post请求，数据获取问题
+××前端××  
+1.要注意请求头的设置,在请求时一定要规定请求数据格式时json格式的  
+2.请求数据`JSON.stringify()`转化    
+例子：
+```
+//数据 JSON 格式化
+const data = JSON.stringify({
+   username: this.state.userName,
+   password: this.state.password,
+   confirmPassword: this.state.confirmPassword
+});
+//设置请求头格式
+fetch('/api/user/register',{
+      method: "POST",
+      mode: "cors",
+      headers:{
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      },
+      body: data
+}).then(response => response.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+```
+
+××后端node××  
+1.引入`body-parser`中间件  
+```
+const bodyParser = require('body-parser');
+```
+2.设置中间件
+```
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+```
+3.在请求的地方获取数据
+```
+app.post('/api/user/register',function(req, res, next){
+    console.log(req.body);
+});
+```
