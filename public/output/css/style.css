@@ -174,6 +174,38 @@ article.item {
     display: table;
     clear: both;
     content: ''; }
+  .aside-item .login-success p {
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #ddd;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+    .aside-item .login-success p span {
+      display: inline-block;
+      color: lightseagreen;
+      width: 30%; }
+    .aside-item .login-success p .go-admin {
+      color: lightseagreen;
+      font-size: 12px;
+      margin-left: 10px; }
+      .aside-item .login-success p .go-admin:hover {
+        color: red; }
+  .aside-item .login-success .logout {
+    display: block;
+    float: right;
+    color: lightseagreen; }
+    .aside-item .login-success .logout:hover {
+      color: red; }
   .aside-item .item-title {
     margin-bottom: 15px; }
     .aside-item .item-title span {
@@ -184,24 +216,27 @@ article.item {
       border-bottom-style: solid;
       border-bottom-color: orange;
       padding-bottom: 5px; }
-  .aside-item .input-con {
-    margin-bottom: 8px; }
-    .aside-item .input-con label {
-      display: inline-block;
-      width: 20%;
-      text-align: left; }
-    .aside-item .input-con input {
-      width: 78%;
-      border-width: 1px;
-      border-style: solid;
-      border-color: #000;
-      border-radius: 3px;
-      padding-top: 5px;
-      padding-left: 10px;
-      padding-bottom: 5px;
-      margin-left: 5px;
-      margin-bottom: 8px;
-      outline: none; }
+  .aside-item .input-con label {
+    display: inline-block;
+    width: 20%;
+    text-align: left; }
+  .aside-item .input-con input {
+    width: 78%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000;
+    border-radius: 3px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    margin-left: 5px;
+    outline: none; }
+  .aside-item .input-con .help-block {
+    font-size: 12px;
+    color: red;
+    margin-left: 20%;
+    height: 25px;
+    line-height: 25px; }
   .aside-item .btn {
     float: right;
     background-color: orange;
@@ -210,9 +245,11 @@ article.item {
     width: 80%;
     color: #fff;
     border-radius: 5px;
-    margin-top: 5px;
     margin-bottom: 10px;
     outline: none; }
+  .aside-item .item-bottom strong {
+    margin-right: 25px;
+    color: red; }
   .aside-item .item-bottom a {
     color: lightseagreen;
     margin-left: 5px; }

@@ -42,6 +42,7 @@ var express = require('express');
 var swig = require('swig');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var Cookies = require('cookies');
 
 var app = express();
 
@@ -72,6 +73,12 @@ swig.setDefaults({cache: false});
 //bodyParser 设置
 app.use( bodyParser.urlencoded({extended: true}));
 app.use( bodyParser.json());
+
+//cookie设置 中间件
+app.use((req,res,next) => {
+  req.cookies = new Cookies(req, res);
+  next();
+});
 
 // 划分模块
 

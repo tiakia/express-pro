@@ -152,6 +152,50 @@ article.item{
         bottom: 15px;
         left: 15px;
     }
+    .login-success{
+        p{
+
+            margin:{
+                bottom: 8px;
+            }
+            padding:{
+                bottom: 10px;
+            }
+            border-bottom:{
+                width: 1px;
+                style: solid;
+                color: #ddd;
+            }
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            span{
+                display: inline-block;
+                color: lightseagreen;
+                width: 30%;
+            }
+            .go-admin{
+                color: lightseagreen;
+                font:{
+                    size: 12px;
+                }
+                margin:{
+                    left: 10px;
+                }
+                &:hover{
+                    color: red;
+                }
+            }
+        }
+        .logout{
+            display: block;
+            float: right;
+            color: lightseagreen;
+            &:hover{
+                color: red;
+            }
+        }
+    }
     .item-title {
         margin:{
              bottom: 15px;
@@ -173,9 +217,6 @@ article.item{
              }
     }
     .input-con {
-        margin:{
-            bottom: 8px;
-        }
         label{
             display: inline-block;
             width: 20%;
@@ -196,9 +237,19 @@ article.item{
             }
             margin:{
                 left: 5px;
-                bottom: 8px;
             }
             outline: none;
+        }
+        .help-block{
+            font:{
+                size: 12px;
+            }
+            color: red;
+            margin:{
+                left: 20%;
+            }
+            height: 25px;
+            line-height: 25px;
         }
     }
     .btn{
@@ -216,12 +267,17 @@ article.item{
             radius: 5px;
         }
         margin:{
-            top: 5px;
             bottom: 10px;
         }
         outline: none;
     }
     .item-bottom{
+        strong{
+            margin:{
+                right: 25px;
+            }
+            color: red;
+        }
         a{
             color: lightseagreen;
             margin:{

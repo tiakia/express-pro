@@ -18,7 +18,9 @@ export default class Aside extends Component{
           value: '',
           error: ''
         }
-      }
+      },
+      msg: '',
+      userInfo: {}
     }
     this.handleMode = this.handleMode.bind(this);
     this.handleValChange = this.handleValChange.bind(this);
@@ -27,6 +29,7 @@ export default class Aside extends Component{
     this.validateUserName = this.validateUserName.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validateConfirm = this.validateConfirm.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
   }
   handleMode(){
     this.setState((prevState) => {
@@ -34,11 +37,25 @@ export default class Aside extends Component{
       return bool ? {mode: "register"} : {mode: "login"};
     });
   }
+  //表单获得焦点
+  handleFocus(e){
+    let formData = this.state.form,
+        targetName = e.target.name;
+    for(let key in formData){
+      if(targetName === key){
+        formData[key].error = '';
+      }
+    }
+    this.setState({
+      form: formData
+    });
+  }
   //验证数据
   handleValChange(e,name){
     let formData = this.state.form,
-        targetVal = e.target.value;
-    switch(name){
+        targetVal = e.target.value,
+        targetName = e.target.name;
+    switch(targetName){
       case 'userName' :
         this.validateUserName(targetVal,formData);
         break;
@@ -49,15 +66,9 @@ export default class Aside extends Component{
         this.validateConfirm(targetVal,formData);
         break;
     }
-    console.log(formData);
     this.setState({
-      formData: formData
+      form: formData
     });
-    for(let key in formData){
-      if(formData[key].error.length != 0){
-        alert(formData[key].error);
-      }
-    }
   }
   validateUserName(val,formData){
     if(val === ""){
@@ -84,19 +95,49 @@ export default class Aside extends Component{
       formData.confirmPassword.error = '';
     }else{
       formData.confirmPassword.value = val;
-      formData.confirmPassword.error = "俩次输入密码不一致";
+      formData.confirmPassword.error = "俩次输入密码必须一致";
     }
     return formData;
   }
   handleLogin(){
-    console.log("登录中。。。");
+    const data = JSON.stringify({
+      username: this.state.form.userName.value,
+      password: this.state.form.password.value
+    });
+
+    fetch('/api/user/login',{
+      method: "POST",
+      mode: 'cors',
+      headers:{
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      },
+      body: data
+    }).then( (response) => response.json())
+      .then( (data) => {
+        //登录成功
+        if(data.code === 3){
+          setTimeout(()=>{
+            this.setState({
+              mode: "login-success",
+              msg: ''
+            });
+          },800);
+        }
+        this.setState({
+          msg: data.msg,
+          userInfo: data.userInfo
+        });
+      })
+      .catch( (err) => console.log(err));
   }
   handleRegister(){
-
+    let registerDay = new Date().getFullYear() +"年"+(new Date().getMonth()+1) +"月"+new Date().getDate() + "日"; 
     const data = JSON.stringify({
-      username: this.state.userName,
-      password: this.state.password,
-      confirmpassword: this.state.confirmPassword
+      username: this.state.form.userName.value,
+      password: this.state.form.password.value,
+      confirmpassword: this.state.form.confirmPassword.value,
+      date: registerDay
     });
 
     fetch('/api/user/register',{
@@ -107,8 +148,22 @@ export default class Aside extends Component{
         "Content-type": "application/json"
       },
       body: data
-    }).then(response => console.log(response))
-      .catch(err => console.error(err));
+    }).then(response => response.json())
+      .then(data => {
+        //注册成功
+        if(data.code === 4){
+          setTimeout(()=>{
+            this.setState({
+              mode: 'login',
+              msg: ''
+            });
+          },800);
+        }
+        this.setState({
+          msg: data.msg,
+        });
+      })
+      .catch(err => console.log(err));
   }
   render(){
     return(
@@ -116,17 +171,25 @@ export default class Aside extends Component{
           {
             this.state.mode === 'login'?
               <Login changeMode = {this.handleMode}
-                     usernameChange = {(e) => this.handleValChange(e,'userName')}
-                     passwordChange = {(e) => this.handleValChange(e, 'password')}
+                     usernameChange = {this.handleValChange}
+                     passwordChange = {this.handleValChange}
                      loginFun = {this.handleLogin}
+                     message = {this.state.msg}
+                     formData = {this.state.form}
+                     focusFun = {this.handleFocus}
               /> :
             this.state.mode === 'register'?              
               <Register changeMode={this.handleMode}
-                     usernameChange = {(e) => this.handleValChange(e,'userName')}
-                     passwordChange = {(e) => this.handleValChange(e,'password')}
-                     confirmPasswordChange = {(e) => this.handleValChange(e,'confirmPassword')}
-                     registerFun = {this.handleRegister}
+                        usernameChange = {this.handleValChange}
+                        passwordChange = {this.handleValChange}
+                        confirmPasswordChange = {this.handleValChange}
+                        registerFun = {this.handleRegister}
+                        message = {this.state.msg}
+                        formData = {this.state.form}
+                        focusFun = {this.handleFocus}
               /> :
+            this.state.mode === 'login-success' ?
+              <LoginSuccess userInfo={this.state.userInfo}/> :
             null
           }
         </aside>
@@ -145,20 +208,28 @@ class Register extends Component {
           <Input labelName="用户名"
                  inputName="userName"
                  inputType="text"                   
-                 handleChange={(e) => this.props.usernameChange(e) }
+                 handleChange={this.props.usernameChange}
+                 errorInfo={this.props.formData.userName.error}
+                 handleFocus={this.props.focusFun}
           />
           <Input labelName="密码"
                  inputName="password"
                  inputType="password"
-                 handleChange={ (e) => this.props.passwordChange(e) }
+                 handleChange={this.props.passwordChange}
+                 errorInfo={this.props.formData.password.error}
+                 handleFocus={this.props.focusFun}
           />
           <Input labelName="确认密码"
-                 inputName="confimPassword"
+                 inputName="confirmPassword"
                  inputType="password"
-                 handleChange={ (e) => this.props.confirmPasswordChange(e) }
+                 handleChange={this.props.confirmPasswordChange}
+                 errorInfo={this.props.formData.confirmPassword.error}
+                 handleFocus={this.props.focusFun}
           />
           <Button title="注册" handleClick={this.props.registerFun} />
-          <div className="right item-bottom" >有帐号
+          <div className="right item-bottom" >
+           <strong>{this.props.message}</strong>
+            有帐号
             <a onClick={this.props.changeMode} >去登录</a>
           </div>
       </div>
@@ -178,16 +249,55 @@ class Login extends Component {
                  inputName="userName"
                  inputType="text"                   
                  handleChange={(e) => this.props.usernameChange(e) }
+                 errorInfo={this.props.formData.userName.error}
+                 handleFocus={this.props.focusFun}
           />
           <Input labelName="密码"
                  inputName='password'
                  inputType="password"
                  handleChange={ (e) => this.props.passwordChange(e) }
+                 errorInfo={this.props.formData.password.error}
+                 handleFocus={this.props.focusFun}
           />
           <Button title="登录" handleClick={this.props.loginFun} />
-          <div className="right item-bottom" >没有帐号
+        <div className="right item-bottom" >
+           <strong>{this.props.message}</strong>
+            有帐号
             <a onClick={this.props.changeMode} >去注册</a>
-          </div>              
+          </div>        
+        </div>
+    )
+  }
+}
+
+class LoginSuccess extends Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+        <div className="aside-item" >
+         <AsideHead title="用户信息" />
+          <div className="login-success" >
+            <p>
+              <span>姓名：</span>
+              <strong>{this.props.userInfo.username}</strong>
+            </p>
+            <p>
+              <span>注册日期：</span>
+              <strong>{this.props.userInfo.date}</strong>
+            </p>
+            <p>
+              <span>身份：</span>
+              <strong>{this.props.userInfo.identity}</strong>
+             {
+               this.props.userInfo.identity === "管理员" ?
+                 <a href="/amdin" className="go-admin" >管理后台</a> :
+                null
+             }
+           </p>
+           <a href="/logout" className="logout" >退出</a>
+          </div>
         </div>
     )
   }
@@ -211,13 +321,16 @@ class Input extends Component{
     super(props);
   }
   render(){
+
     return(
         <div className="input-con" >
         <label>{this.props.labelName}</label>
         <input type={this.props.inputType}
                name={this.props.inputName}
-               onBlur={(e) => this.props.handleChange(e) }
+               onBlur={(e) => this.props.handleChange(e)}
+               onFocus={(e) => this.props.handleFocus(e)}
         />
+        <span className="help-block" >{this.props.errorInfo}</span>
         </div>
     )
   }
