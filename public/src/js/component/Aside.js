@@ -30,6 +30,19 @@ export default class Aside extends Component{
     this.validatePassword = this.validatePassword.bind(this);
     this.validateConfirm = this.validateConfirm.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
+  }
+  componentWillMount(){
+    const userInfo = localStorage.getItem('userInfo'),
+          userObj = JSON.parse(userInfo);
+    //console.log(userObj);
+    if(userObj){
+      this.setState({
+         mode: 'login-success',
+         userInfo: userObj
+      });
+    }
+    
   }
   handleMode(){
     this.setState((prevState) => {
@@ -104,6 +117,7 @@ export default class Aside extends Component{
       username: this.state.form.userName.value,
       password: this.state.form.password.value
     });
+              console.log(document.cookie);
 
     fetch('/api/user/login',{
       method: "POST",
@@ -112,7 +126,8 @@ export default class Aside extends Component{
         "Accept": "application/json",
         "Content-type": "application/json"
       },
-      body: data
+      body: data,
+      credentials: 'include'
     }).then( (response) => response.json())
       .then( (data) => {
         //登录成功
@@ -120,13 +135,13 @@ export default class Aside extends Component{
           setTimeout(()=>{
             this.setState({
               mode: "login-success",
-              msg: ''
+              msg: '',
+              userInfo: data.userInfo              
             });
           },800);
         }
         this.setState({
           msg: data.msg,
-          userInfo: data.userInfo
         });
       })
       .catch( (err) => console.log(err));
@@ -165,6 +180,23 @@ export default class Aside extends Component{
       })
       .catch(err => console.log(err));
   }
+  handleLogOut(){
+    fetch('/api/logout',{
+      method: 'GET',
+      headers:{
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+    }).then(response=> response.json())
+      .then(data=> {
+        if(data.code === 1){//退出成功，清除localStorage
+          localStorage.removeItem('userInfo');
+          this.setState({
+            mode: 'login'
+          });
+        }
+      }).catch(err=>console.log(err));
+  }
   render(){
     return(
         <aside className="right" >
@@ -189,7 +221,7 @@ export default class Aside extends Component{
                         focusFun = {this.handleFocus}
               /> :
             this.state.mode === 'login-success' ?
-              <LoginSuccess userInfo={this.state.userInfo}/> :
+              <LoginSuccess userInfo={this.state.userInfo} logOutFun={this.handleLogOut}/> :
             null
           }
         </aside>
@@ -296,7 +328,7 @@ class LoginSuccess extends Component{
                 null
              }
            </p>
-           <a href="/logout" className="logout" >退出</a>
+           <a javascript="void(0)" className="logout" onClick={this.props.logOutFun}>退出</a>
           </div>
         </div>
     )

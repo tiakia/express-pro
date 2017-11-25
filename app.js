@@ -42,7 +42,8 @@ var express = require('express');
 var swig = require('swig');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var Cookies = require('cookies');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
 var app = express();
 
@@ -74,11 +75,17 @@ swig.setDefaults({cache: false});
 app.use( bodyParser.urlencoded({extended: true}));
 app.use( bodyParser.json());
 
-//cookie设置 中间件
-app.use((req,res,next) => {
-  req.cookies = new Cookies(req, res);
-  next();
-});
+//cookie设置
+app.use(cookieParser());
+// app.use(session({
+//   'secret': 'tiankai',
+//   'cookie': {
+//     'httpOnly': false,
+//     'maxAge': 900000000,
+//   },
+//   'resave': false,
+//   'saveUninitialized': true
+// }));
 
 // 划分模块
 

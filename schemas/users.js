@@ -6,5 +6,8 @@ module.exports = new mongoose.Schema({
   username: String,
   password: String,
   registerDay: String,
-  identity: Number
+  isAdmin:{
+    type: Boolean,
+    default: false
+  }
 });
