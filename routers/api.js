@@ -112,10 +112,11 @@ router.post('/user/login',function(req, res, next){
       username: userInfo.username,
       uid: userInfo._id,
       date: userInfo.registerDay,
-      identity: identityName,
+      identity: userInfo.isAdmin
     }),{
       maxAge: 90000000,
       httpOnly: false,
+      signed: true
     });
 
     responseData.msg = "登录成功";

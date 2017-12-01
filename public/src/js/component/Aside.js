@@ -117,7 +117,6 @@ export default class Aside extends Component{
       username: this.state.form.userName.value,
       password: this.state.form.password.value
     });
-              console.log(document.cookie);
 
     fetch('/api/user/login',{
       method: "POST",
@@ -132,13 +131,20 @@ export default class Aside extends Component{
       .then( (data) => {
         //登录成功
         if(data.code === 3){
+          let user_info = data.userInfo;
           setTimeout(()=>{
             this.setState({
               mode: "login-success",
               msg: '',
-              userInfo: data.userInfo              
+              userInfo: user_info              
             });
           },800);
+          let user_info_data = {
+            username: user_info.username,
+            date: user_info.date,
+            identity: user_info.identity
+          }
+          localStorage.setItem('userInfo',JSON.stringify(user_info_data));
         }
         this.setState({
           msg: data.msg,
@@ -324,7 +330,7 @@ class LoginSuccess extends Component{
               <strong>{this.props.userInfo.identity}</strong>
              {
                this.props.userInfo.identity === "管理员" ?
-                 <a href="/amdin" className="go-admin" >管理后台</a> :
+                 <a href="/admin" className="go-admin" >管理后台</a> :
                 null
              }
            </p>

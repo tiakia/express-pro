@@ -2,13 +2,13 @@ body{
     background-color: #ddd;
 }
 
-@mixin split($top:0,$right:0,$bottom:0,$left:0){
+@mixin split($top: 0,$right: 0,$bottom: 0,$left: 0){
     margin:{
-        top: $top;
+        top: $top ;
         right: $right;
         bottom: $bottom;
-        left: $left;
-    }
+        left: $left
+    };
 }
 
 /* 导航拦 */
@@ -16,9 +16,7 @@ header{
     background-color: rgba(0,0,0,.5);
     width: 100%;
     height: 100px;
-    margin:{
-        bottom: 0;
-    }
+    margin-bottom: 0;
     h1 {
         color: #fff;
     }
@@ -33,20 +31,12 @@ nav{
                     display: inline-block;
                     height: 50px;
                     line-height: 50px;
-                    border-bottom:{
-                        width: 2px;
-                        style: solid;
-                        color: transparent;
-                    }
-                    padding:{
-                        left: 20px;
-                        right: 20px;
-                    }
+                    border-bottom:2px solid transparent;
+                    padding-left: 20px;
+                    padding-right: 20px;
                     &:hover{
-                        border-bottom: {
-                            color: orange;
-                            cursor: pointer;
-                        }
+                        border-bottom-color: orange;
+                        cursor: pointer;
                     }
             }
         }
@@ -55,21 +45,14 @@ nav{
 
 #app{
     width: 1200px;
-    margin:{
-        top: 10px;
-        left: auto;
-        right: auto;
-        bottom: 0;
-    }
+    margin:10px auto 0;
     overflow: hidden;
     /* 主体部分布局 */
     main{
           width: 67%;
           height: 500px;
-          padding:{
-              left: 10px;
-              right: 10px;
-          };
+          padding-left: 10px;
+          padding-right: 10px;
     }
     /* 侧栏部分布局 */
     aside{
@@ -80,92 +63,52 @@ nav{
 
 article.item{
     background-color: #fff;
-    padding:{
-        top: 20px;
-        right: 30px;
-        bottom: 20px;
-        left: 30px;
-    }
-    border:{
-        radius: 5px;
-    }
+    padding:20px 30px;
+    border-radius: 5px;
     min-height: 100px;
     .title {
         span{
-            font:{
-                size: 18px;
-                weight: bold;
-            }
+            font-size: 18px;
+            font-weight: bold;
         }
         @include split(15px,0,15px,0);
     }
     .article-info{
-        margin:{
-            top: 10px;
-            bottom: 10px;
-        }
+        margin-top: 10px;
+        margin-bottom: 10px;
         .color{
             color: lightseagreen;
-            margin:{
-                right: 5px;
-            }
+            margin-right: 5px;
         }
 
     }
     .summary{
-        font:{
-           size: 18px;
-           weight: bold;
-        }
+        font-size: 18px;
+        font-weight: bold;
         @include split(15px,0,15px,0);
      }
      .read-more{
-        padding:{
-            top: 5px;
-            right: 10px;
-            bottom: 5px;
-            left: 10px;
-        }
-        background:{
-            color: orange;
-        }
+        padding:5px 10px;
+        background-color: orange;
         color: #fff;
         outline: none;
     }
 }
 
 .aside-item {
-    border:{
-        radius: 5px;
-    }
+    border-radius: 5px;
     &:after{
         display: table;
         clear: both;
         content: '';
     }
-    background:{
-        color: #fff;
-    }
-    padding:{
-        top: 15px;
-        right: 15px;
-        bottom: 15px;
-        left: 15px;
-    }
+    background-color: #fff;
+    padding: 15px;
     .login-success{
         p{
-
-            margin:{
-                bottom: 8px;
-            }
-            padding:{
-                bottom: 10px;
-            }
-            border-bottom:{
-                width: 1px;
-                style: solid;
-                color: #ddd;
-            }
+            margin-bottom: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -176,12 +119,8 @@ article.item{
             }
             .go-admin{
                 color: lightseagreen;
-                font:{
-                    size: 12px;
-                }
-                margin:{
-                    left: 10px;
-                }
+                font-size: 12px;
+                margin-left: 10px;
                 &:hover{
                     color: red;
                 }
@@ -197,24 +136,14 @@ article.item{
         }
     }
     .item-title {
-        margin:{
-             bottom: 15px;
-        }
+        margin-bottom: 15px;
         span {
-             font:{
-                 size: 20px;
-                 weight: bold;
-             }
-             display: inline-block;
-             border-bottom:{
-                 width: 2px;
-                 style: solid;
-                    color: orange;
-                 }
-                 padding:{
-                    bottom: 5px;
-                 }
-             }
+            font-size: 20px;
+            font-weight: bold;
+            display: inline-block;
+            border-bottom: 2px solid orange;
+            padding-bottom: 5px;
+        }
     }
     .input-con {
         label{
@@ -224,65 +153,41 @@ article.item{
         }
         input{
             width: 78%;
-            border:{
-                width: 1px;
-                style: solid;
-                color: #000;
-                radius: 3px;
-            }
-            padding:{
-                top: 5px;
-                left: 10px;
-                bottom: 5px;
-            }
-            margin:{
-                left: 5px;
-            }
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 10px;
+            margin-left: 5px;
             outline: none;
         }
         .help-block{
-            font:{
-                size: 12px;
-            }
+            font-size: 12px;
             color: red;
-            margin:{
-                left: 20%;
-            }
+            margin-left: 20%;
             height: 25px;
             line-height: 25px;
         }
     }
     .btn{
         float: right;
-        background:{
-            color: orange;
-        }
-        padding:{
-            top: 8px;
-            bottom: 8px;
-        }
+        background-color: orange;
+        padding-top: 8px;
+        padding-bottom: 8px;
         width: 80%;
         color: #fff;
-        border:{
-            radius: 5px;
-        }
-        margin:{
-            bottom: 10px;
-        }
+        border-radius: 5px;
+        margin-bottom: 10px;
         outline: none;
     }
     .item-bottom{
         strong{
-            margin:{
-                right: 25px;
-            }
+            margin-right: 25px;
             color: red;
         }
         a{
             color: lightseagreen;
-            margin:{
-                left: 5px;
-            }
+            margin-left: 5px;
         }
     }
 }

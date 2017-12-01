@@ -76,7 +76,8 @@ app.use( bodyParser.urlencoded({extended: true}));
 app.use( bodyParser.json());
 
 //cookie设置
-app.use(cookieParser());
+app.use(cookieParser('tiankai'));
+
 // app.use(session({
 //   'secret': 'tiankai',
 //   'cookie': {

@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import {render} from 'react-dom';
-import './../css/reset.css';
+import './../css/reset.scss';
 import './../css/main.scss';
 import Blog from './component/Blog';
 
