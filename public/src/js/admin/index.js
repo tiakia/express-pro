@@ -1,69 +1,178 @@
-import { Menu, Icon, Button } from 'antd';
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { Layout, Menu, Icon, Table } from 'antd';
+import "./../../css/admin.scss";
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+const {Header, Sider, Content, Footer } = Layout;
 
-class Admin extends Component {
+
+class Admin extends Component{
   constructor(props){
     super(props);
     this.state = {
+      userInfo: undefined,
+      mode: "",
       collapsed: false
     }
-    this.toggleCollapsed = this.toggleCollapsed.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
   }
-  toggleCollapsed(){
-      this.setState({
-        collapsed: !this.state.collapsed
-      });
+  componentDidMount(){
+    this.getUserInfo();
+  }
+  getUserInfo(){
+    fetch('/admin/user',{
+      method: "GET",
+      mode: 'cors',
+      headers:{
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      },
+      credentials: 'include'
+    }).then(response => response.json())
+      .then( data => {
+        console.log(data);
+        this.setState({
+          userInfo: data,
+          mode: 'userInfo'
+        });
+      })
   }
   render(){
     return(
-        <div style={{width: 240}}>
-          <Button type='primary' onClick={this.toggleCollapsed} style={{marginBottom: 16}} >
-            <Icon type={this.state.collapsed ? "menu-unfold" : "menu-fold"}/>
-          </Button>
-          <Menu
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-            theme='dark'
-            inlineCollapsed={this.state.collapsed}
+        <Layout>
+          <AdminSlider
+             getUserInfo = {this.getUserInfo}
+          />
+          <Layout>
+            <Header style={{ background: "#fff", padding: 0}}/>
+            <Content style={{ margin: "24px 16px 0"}} >
+              {
+                this.state.mode === "userInfo" ?
+                  <UserInfo userInfoData={this.state.userInfo}/>
+                : <h1>content</h1>
+               }
+            </Content>
+            <Footer style={{ textAlign: 'center'}}>
+              Extpress Blog @2017 Create by Tiankai
+            </Footer>
+          </Layout>
+        </Layout>
+    )
+  }
+}
+
+class AdminSlider extends Component {
+  constructor(props){
+    super(props)
+  }
+  render(){
+    return(
+          <Sider
+            breakpoint="lg"
+            collapsedWidth="0"
           >
-            <Menu.Item key="1">
-               <Icon type="pie-chart"/>
-               <span>Option 1</span>
-            </Menu.Item>
-            <Menu.Item key="2">
-               <Icon type="pie-chart"/>
-               <span>Option 2</span>
-            </Menu.Item>
-            <Menu.Item key="3">
-               <Icon type="pie-chart"/>
-               <span>Option 3</span>
-            </Menu.Item>
-            <SubMenu key="sub1" title={<span><Icon type="mail"/><span>Naviagtion One</span></span>} >
-              <Menu.Item key="4">Option 5</Menu.Item>
-              <Menu.Item key="5">Option 6</Menu.Item>
-              <Menu.Item key="6">Option 7</Menu.Item>
-              <Menu.Item key="7">Option 8</Menu.Item>
-            </SubMenu>
-            <SubMenu key="sub2" title={<span><Icon type="appstore"/><span>Naviagtion Two</span></span>} >
-              <Menu.Item key="8">Option 9</Menu.Item>
-              <Menu.Item key="9">Option 10</Menu.Item>
-              <SubMenu key="sub3" title="SubMenu" >
-                <Menu.Item key="11">Option 11</Menu.Item>
-                <Menu.Item key="12">Option 12</Menu.Item>
-              </SubMenu>
-            </SubMenu>
-         </Menu>
-        </div>
+            <div className="logo">
+            </div>
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} >
+               <Menu.Item key="1">
+                 <a className="nav-text" onClick={this.props.getUserInfo} >
+                    <Icon type="user"/>
+                    用户信息
+                 </a>
+               </Menu.Item>
+               <Menu.Item key="2">
+                 <a className="nav-text">
+                   <Icon type="video-camera"/>
+                   nav 2
+                 </a>
+               </Menu.Item>
+               <Menu.Item key="3">
+                  <a className="nav-text">
+                     <Icon type="upload"/>
+                     nav 3
+                  </a>
+               </Menu.Item>
+               <Menu.Item key="4">
+                  <a className="nav-text">
+                     <Icon type="user"/>
+                    用户信息
+                  </a>
+               </Menu.Item>
+            </Menu>
+          </Sider>
+    )
+  }
+}
+
+const userInfoColumns = [{
+  title: '用户名',
+  dataIndex: 'username',
+  key: 'username',
+},{
+  title: '密码',
+  dataIndex: 'password',
+  key: 'password',
+},{
+  title: '注册日期',
+  dataIndex: 'registerDay',
+  key: 'registerDay',
+},{
+  title: '管理员',
+  dataIndex: 'isAdmin',
+  key: 'isAdmin',
+}];
+
+class UserInfo extends Component {
+  constructor(props){
+    super(props);
+    this.renderUserInfo = this.renderUserInfo.bind(this);
+  }
+  renderUserInfo(val, item){
+    return(
+        <Row gutter={16} key={val._id}>
+           <Col className="gutter-row" span={6}>
+             <div className="gutter-box">{val.username}</div>
+           </Col>
+           <Col className="gutter-row" span={6}>
+             <div className="gutter-box">{val.password}</div>
+           </Col>
+           <Col className="gutter-row" span={6}>
+             <div className="gutter-box">{val.registerDay}</div>
+           </Col>
+           <Col className="gutter-row" span={6}>
+             <div className="gutter-box">{val.isAdmin ? "是" : "否"}</div>
+          </Col>
+        </Row>
+     )
+  }
+  render(){
+    return(
+              <div style={{padding: 24, background: "#fff", height: "100vh"}}>
+                 <Row gutter={16} className="table-header">
+                     <Col className="gutter-row" span={6}>
+                        <div className="gutter-box">用户名</div>
+                     </Col>
+                     <Col className="gutter-row" span={6}>
+                        <div className="gutter-box">密码</div>
+                     </Col>
+                     <Col className="gutter-row" span={6}>
+                        <div className="gutter-box">注册日期</div>
+                     </Col>
+                     <Col className="gutter-row" span={6}>
+                        <div className="gutter-box">管理员</div>
+                     </Col>
+                 </Row>
+        {
+          this.props.userInfoData != undefined ?
+            this.props.userInfoData.map((val,item)=>this.renderUserInfo(val,item))
+            : null
+        }
+              </div>
     )
   }
 }
 
 render(
     <Admin/>,
-    document.getElementById('admin')
+  document.getElementById('admin')
 );
