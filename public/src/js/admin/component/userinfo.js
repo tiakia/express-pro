@@ -24,17 +24,17 @@ export default class UserInfo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      userInfoData: props.userInfoData.data,
-      pagination: props.userInfoData.pagination
+      userInfoData: props.userInfoData,
+      pagination: props.userInfoPage
     }
     this.mapUserInfo = this.mapUserInfo.bind(this);
   }
   componentDidMount(){
-    //this.mapUserInfo(this.state.userInfoData,this.state.pagination);
+
   }
   componentWillReceiveProps(nextProps){
-    const userInfo = nextProps.userInfoData.data,
-          pagination = nextProps.userInfoData.pagination;
+    const userInfo = nextProps.userInfoData,
+          pagination = nextProps.userInfoPage;
     this.mapUserInfo(userInfo, pagination);
   }
   mapUserInfo(data,pagination){
@@ -47,22 +47,23 @@ export default class UserInfo extends Component {
           password: val.password,
           registerDay: val.registerDay,
           isAdmin: val.isAdmin ? "是" : "否"
-        });
-        this.setState({
+       });
+       this.setState({
           userInfoData: dataSource,
           pagination: pagination
-        });
+       });
       });
     }
   }
   render(){
     return(
        <div style={{padding: 24, background: "#fff", height: "100vh"}}>
-        <Table columns={userInfoColumns}
-               dataSource={this.state.userInfoData}
-               pagination={this.state.pagination}
-               onChange={(pagination)=>this.props.handleGetUserInfo(pagination.current)}
-        />
+          <Table columns={userInfoColumns}
+                 dataSource={this.state.userInfoData}
+                 pagination={this.state.pagination}
+                 onChange={pagination => this.props.handleGetUserInfo(pagination.current)}
+          />
+
        </div>
     )
   }

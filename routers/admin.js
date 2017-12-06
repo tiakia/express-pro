@@ -93,11 +93,74 @@ router.get('/category', (req, res)=>{
   });
 });
 
-router.post('/category/add',(req, res, next)=>{
-  console.log(req.query.categoryName);
+/*
+分类添加
+*/
+router.get('/category/add',(req, res, next)=>{
+  let category_name = req.query.categoryName,
+      responseData = {
+        code: 0,
+        msg: ''
+      }
+
+  if(!category_name){
+    responseData.code = -1;
+    responseData.msg = "请输入分类名称";
+    res.json(responseData);
+    return;
+  }
+
+  Category.findOne({
+    name: category_name
+  }).then((categoryName)=>{
+    //console.log(categoryName);
+    if(categoryName){
+      responseData.code = 1;
+      responseData.msg = '该分类已经存在';
+      res.json(responseData);
+      return;
+    }
+
+    return new Category({
+      name: category_name
+    }).save();
+
+  }).then((newCategory)=>{
+
+    if(newCategory){
+      responseData.code = 2;
+      responseData.msg = "分类添加成功";
+      res.json(responseData);
+      return;
+    }
+  }).catch(err=>{
+    console.log(err);
+  });
 });
 
-router.get('/category/delete',(req, res, next)=>{
+/*
+分类修改
+*/
+
+router.get('category/edit',(req, res, next)=>{
+  var id = req.query.id || '';
+  Category.findOnd({
+    _id: id
+  }).then(category=>{
+    console.log(category);
+    if(!category){
+      res.render('admin/error',{
+        msg: "分类信息不存在"
+      });
+    }else{
+      res.render('admin/category_edit',{
+
+      });
+    }
+  });
+});
+
+router.get('/category/del',(req, res, next)=>{
 
 });
 

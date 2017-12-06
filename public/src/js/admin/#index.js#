@@ -90,8 +90,8 @@ class Admin extends Component{
     }).then(response => response.json())
       .then( data => {
         //console.log(data);
+        categoryName
         if(data.code === 2){
-          alert("添加成功");
           this.setState({
             mode: 'category_add',
           });

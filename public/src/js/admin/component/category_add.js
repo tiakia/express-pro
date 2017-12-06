@@ -10,7 +10,7 @@ class CategoryAddForm extends Component {
   render(){
     const { getFieldDecorator } = this.props.form;
     return(
-        <Form layout="inline" onSubmit={(e) => this.props.handleAddCategory(e)}>
+        <Form layout="inline" onSubmit={(e) => this.props.handleAddCategory(e,this.props.form)}>
           <FormItem>
             {
               getFieldDecorator('categoryName', {
