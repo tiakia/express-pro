@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var queryString = require('queryString');
 var User = require('./../models/User');
+var Category = require('./../models/Categories');
 //获取用户信息判断是否是管理员
 router.use(function(req, res, next){
   try{
@@ -47,13 +48,57 @@ router.get('/user',function(req, res, next){
     return;
   }
   let page = req.query.page || 1,
-      limit = 2,
-      skip = (page - 1) * limit;
-  console.log(req);
+      limit = 2,    //一页显示的条数
+      skip = (page - 1) * limit,
+      responseData = {
+        code: 0,
+        data: {},
+        pagination: {
+          total: 0, //一共的数据条数
+          pageSize: limit
+        }
+      };
+  User.count().then(totalCount => {
+    responseData.pagination.total = totalCount;
+  });
   User.find().limit(limit).skip(skip).then(function(users){
-    res.send(users);
+    responseData.data = users;
+    responseData.code = 1;
+    res.send(responseData);
   });
 });
 
+
+/*
+分类首页
+**/
+
+router.get('/category', (req, res)=>{
+  let page = req.query.page || 1,
+      limit = 2,    //一页显示的条数
+      skip = (page - 1) * limit,
+      responseData = {
+        data: {},
+        pagination: {
+          total: 0, //一共的数据条数
+          pageSize: limit
+        }
+      };
+  Category.count().then(totalCount => {
+    responseData.pagination.total = totalCount;
+  });
+  Category.find().limit(limit).skip(skip).then(function(category){
+    responseData.data = category;
+    res.send(responseData);
+  });
+});
+
+router.post('/category/add',(req, res, next)=>{
+  console.log(req.query.categoryName);
+});
+
+router.get('/category/delete',(req, res, next)=>{
+
+});
 
 module.exports = router;
