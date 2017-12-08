@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Divider } from 'antd';
+import { Link } from 'react-router-dom';
 
 const categoryColumns = [{
   title: 'ID',
@@ -14,11 +15,19 @@ const categoryColumns = [{
   dataIndex: '',
   key: 'doSomething',
   render: (record)=>{
+    const data = {id: record.categoryId, categoryName: record.categoryName};
     return(
       <span>
-        <a href={"/admin/category/edit?id="+record.categoryId} style={{marginRight: 5}}>修改</a>
+        <Link to={{
+          pathname: '/categoryEdit',
+          search: `?id=${record.categoryId}`,
+          state: { categoryData: data }
+        }} style={{marginRight: 5}}>修改</Link>
 
-        <a href={'/admin/category/del?id='+record.categoryId}>删除</a>
+        <Link to={{
+          pathname: '/categoryDel',
+          search: `?id=${record.categoryId}`
+        }}>删除</Link>
       </span>
     )
   }
@@ -94,7 +103,7 @@ export default class Category extends Component {
                  pagination={this.state.categoryPagination}
                  onChange={pagination => this.getCategory(pagination.current)}
           />
-       </div>
+   o    </div>
     )
   }
 }

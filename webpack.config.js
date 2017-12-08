@@ -15,7 +15,7 @@ const webpackPlugin = [
     banner: 'Author: tiankai',
     raw: false
   }),
-  new CleanPlugin([path.resolve('public/output/*.js'),path.resolve('public/output/css/*.css')]),
+  //new CleanPlugin([path.resolve('public/output/*.js'),path.resolve('public/output/css/*.css')]),
   //开启全局模块热替换
   new webpack.HotModuleReplacementPlugin(),
   new webpack.NamedModulesPlugin(),
@@ -41,6 +41,11 @@ const webpackPlugin = [
 
 module.exports = {
   devtool: "cheap-module-eval-source-map",
+  devServer: {
+      historyApiFallback: {
+        index: './views/admin/index.html'
+      }
+  },
   entry:{
     main: path.resolve('./public/src/js/index.js'),
     admin: path.resolve('./public/src/js/admin/router.js')

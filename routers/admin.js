@@ -41,7 +41,7 @@ router.get('/',(req, res, next)=>{
   2: 3-4 skip:2
 */
 
-router.get('/user',function(req, res, next){
+router.get('/userInfo',function(req, res, next){
   let bool = /[0-9]*/g.test(req.query.page);
   if(!bool){
     res.send('请输入数字');

@@ -60,7 +60,7 @@ export default class UserInfo extends Component {
   //   }
   // }
   getUserInfo(page = 1){
-    fetch(`/admin/user?page=${page}`,{
+    fetch(`/admin/userInfo?page=${page}`,{
       method: "GET",
       mode: 'cors',
       headers:{

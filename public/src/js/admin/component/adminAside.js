@@ -37,12 +37,6 @@ export default class AdminAside extends Component {
                          分类添加
                       </Link>
                    </Menu.Item>
-                   <Menu.Item key="5">
-                      <a className="nav-text"  >
-                         <Icon type="delete"/>
-                         分类删除
-                      </a>
-                   </Menu.Item>
                </SubMenu>
                <Menu.Item key="33">
                   <a className="nav-text">

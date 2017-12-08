@@ -98,7 +98,7 @@ mongoose.connection.openUri('mongodb://localhost:27018/blog',function(err){
   if(err){
     console.log('数据库连接失败');
   }else{
-    console.log('数据库连接成功');
+    console.log('数据库连接成功,打开浏览器访问localhost:8080');
     app.listen(8080);
   }
 });
