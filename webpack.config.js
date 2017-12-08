@@ -43,7 +43,7 @@ module.exports = {
   devtool: "cheap-module-eval-source-map",
   entry:{
     main: path.resolve('./public/src/js/index.js'),
-    admin: path.resolve('./public/src/js/admin/index.js')
+    admin: path.resolve('./public/src/js/admin/router.js')
   },
   output:{
     path: __dirname +'/public/output/',

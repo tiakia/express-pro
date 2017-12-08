@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    vendors: ['react', 'react-dom', 'antd']
+    vendors: ['react', 'react-dom','react-router', 'antd']
   },
   output:{
     filename: '[name].dll.js',

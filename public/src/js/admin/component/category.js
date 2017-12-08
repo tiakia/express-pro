@@ -24,47 +24,75 @@ const categoryColumns = [{
   }
 }];
 
-
-
 export default class Category extends Component {
   constructor(props){
     super(props);
     this.state = {
-      categoryData: props.categoryData,
-      pagination: props.categoryPage
+      categoryData: null,
+      categoryPagination: null,
     }
-    this.mapCategory = this.mapCategory.bind(this);
+    //this.mapCategory = this.mapCategory.bind(this);
+    this.getCategory = this.getCategory.bind(this);
+  }
+  componentWillMount(){
+    this.getCategory();
   }
   componentDidMount(){
-    this.props.handleGetCategory();
+
   }
   componentWillReceiveProps(nextProps){
-    this.mapCategory(nextProps.categoryData, nextProps.categoryPage);
+    //this.mapCategory(nextProps.categoryData, nextProps.categoryPage);
   }
-  mapCategory(data, pagination){
-    const dataSource = [];
-    if(data){
-      data.map((val, item)=>{
-        dataSource.push({
-          key: val._id.toString(),
-          categoryId: val._id.toString(),
-          categoryName: val.name
+  // mapCategory(data, pagination){
+  //   const dataSource = [];
+  //   if(data){
+  //     data.map((val, item)=>{
+  //       dataSource.push({
+  //         key: val._id.toString(),
+  //         categoryId: val._id.toString(),
+  //         categoryName: val.name
+  //       });
+  //     });
+  //     this.setState({
+  //       categoryData: dataSource,
+  //       pagination: pagination
+  //     });
+  //   }
+  // }
+  getCategory(page = 1){
+    fetch(`/admin/category?page=${page}`,{
+      method: "GET",
+      mode: 'cors',
+      headers:{
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      },
+      credentials: 'include',
+    }).then(response => response.json())
+      .then( categoryData => {
+        //console.log(categoryData);
+        const dataSource = [];
+        categoryData.data.map((val, item)=>{
+          dataSource.push({
+            key: val._id.toString(),
+            categoryId: val._id.toString(),
+            categoryName: val.name
+          });
         });
-      });
-      this.setState({
-        categoryData: dataSource,
-        pagination: pagination
-      });
-    }
+        this.setState({
+          categoryData: dataSource,
+          categoryPagination: categoryData.pagination
+        });
+      })
   }
   render(){
     return(
-       <div style={{padding: 24, background: "#fff", height: "100vh"}}>
+       <div className="contentLayout">
           <span>category</span>
           <Table columns={categoryColumns}
                  dataSource={this.state.categoryData}
-                 pagination={this.state.pagination}
-                 onChange={pagination => this.props.handleGetCategory(pagination.current)}
+                 pagination={this.state.categoryPagination}
+                 onChange={pagination => this.getCategory(pagination.current)}
           />
        </div>
     )

@@ -6,11 +6,37 @@ const FormItem =  Form.Item;
 class CategoryAddForm extends Component {
   constructor(props){
     super(props);
+    this.addCategory = this.addCategory.bind(this);
+  }
+  addCategory(e){
+    e.preventDefault();
+    let categoryName = '';
+    this.props.form.validateFields((err, values)=>{
+      if(!err){
+        categoryName = values.categoryName;
+      }
+    });
+    fetch(`/admin/category/add?categoryName=${categoryName}`,{
+      method: "GET",
+      mode: 'cors',
+      headers:{
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      },
+      credentials: 'include',
+    }).then(response => response.json())
+      .then( data => {
+        //console.log(data);
+        if(data.code === 2){
+          alert("添加成功");
+        }
+      })
   }
   render(){
     const { getFieldDecorator } = this.props.form;
     return(
-        <Form layout="inline" onSubmit={(e) => this.props.handleAddCategory(e,this.props.form)}>
+     <div className="contentLayout">
+        <Form layout="inline" onSubmit={(e) => this.addCategory(e)}>
           <FormItem>
             {
               getFieldDecorator('categoryName', {
@@ -29,6 +55,7 @@ class CategoryAddForm extends Component {
              </Button>
           </FormItem>
         </Form>
+      </div>
     )
   }
 }

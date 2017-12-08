@@ -65,6 +65,7 @@ router.get('/user',function(req, res, next){
     responseData.data = users;
     responseData.code = 1;
     res.send(responseData);
+
   });
 });
 
