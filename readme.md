@@ -108,3 +108,25 @@ app.post('/api/user/register',function(req, res, next){
 #### admin-slider 做成一个组件
 #### content 做成一个组件
 每个页面调用这俩个木块不同的是，不同的页面加载的`content`组件不一样
+#### webpack-dev-server 和 webpack-dev-middleware的区别
+对于前端静态页面来说，使用`webpack-dev-server`它是一个小型的`express`服务器，是用`webpack-dev-middleware`来处理`webpack`编译后的输出  
+而如果使用的是`node`开发的话使用`webpack-dev-middleware`来处理  
+相应的热更新的也是`webpack-hot-middleware`
+#### Dropdown 配合 Avatar 报错问题
+
+```
+<Dropdown overlay={AvatarDrop} trigger={['click']}>
+   <Avatar icon="user" style={{backgroundColor: '#87d068'}}/>
+   <Icon type="down"/>
+</Dropdown>
+```
+这样写会报错  
+```
+Cannot read property 'className' of undefined
+```
+正确写法
+```
+<Dropdown overlay={AvatarDrop} trigger={['click']}>
+   <Avatar icon="user" style={{backgroundColor: '#87d068'}}/>
+</Dropdown>
+```

@@ -38,14 +38,33 @@ admin模块
     /comment/delete   评论删除
 */
 
-var express = require('express');
-var swig = require('swig');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+const express = require('express');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const swig = require('swig');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const history = require('connect-history-api-fallback');
 
-var app = express();
+const app = express();
+const config = require('./webpack.config.js');
+const compiler = webpack(config);
+
+app.use(webpackDevMiddleware(compiler,{
+    publicPath: config.output.publicPath,
+    // historyApiFallback: {
+      // rewrites: [
+      //   { from: /^\/$/,to: '/'},
+      //   { from: /^\/admin\/*/,to: '/admin'}
+      // ]
+    // },
+    hot: true,
+}));
+
+app.use(webpackHotMiddleware(compiler));
 
 //设置静态文件托管 html css image
 // 当用户访问的url以/public开始，直接返回对应的__dirname + '/public'下的文件
@@ -90,6 +109,13 @@ app.use(cookieParser('tiankai'));
 
 // 划分模块
 
+app.use(history({
+  rewrites: [
+    { from: /^\/$/,to: '/'},
+    { from: /^\/admin\/*/, to: '/admin'}
+  ]
+}));
+
 app.use('/admin', require('./routers/admin'));
 app.use('/api', require('./routers/api'));
 app.use('/', require('./routers/main'));
@@ -98,8 +124,9 @@ mongoose.connection.openUri('mongodb://localhost:27018/blog',function(err){
   if(err){
     console.log('数据库连接失败');
   }else{
-    console.log('数据库连接成功,打开浏览器访问localhost:8080');
-    app.listen(8080);
+    app.listen(8080,()=>{
+      console.log('数据库连接成功,打开浏览器访问localhost:8080');
+    });
   }
 });
 

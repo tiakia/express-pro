@@ -4,13 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --progress --colors && node app.js"
+    "start": "cross-env NODE_ENV=dev && node app.js",
+    "build": "cross-env NODE_ENV=prod && node app.js"
   },
   "author": "tiankai",
   "license": "ISC",
   "dependencies": {
     "antd": "^2.13.10",
     "body-parser": "^1.18.2",
+    "connect-history-api-fallback": "^1.5.0",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
@@ -48,6 +50,7 @@
     "uglifyjs-webpack-plugin": "^1.1.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-middleware": "^1.12.2",
+    "webpack-hot-middleware": "^2.21.0"
   }
 }

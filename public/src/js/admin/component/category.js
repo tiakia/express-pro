@@ -97,13 +97,12 @@ export default class Category extends Component {
   render(){
     return(
        <div className="contentLayout">
-          <span>category</span>
           <Table columns={categoryColumns}
                  dataSource={this.state.categoryData}
                  pagination={this.state.categoryPagination}
                  onChange={pagination => this.getCategory(pagination.current)}
           />
-   o    </div>
+       </div>
     )
   }
 }

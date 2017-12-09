@@ -108,6 +108,7 @@ router.post('/user/login',function(req, res, next){
       date: userInfo.registerDay,
       identity: identityName
     };
+    //用户信息存cookie
     res.cookie('userInfo', JSON.stringify({
       username: userInfo.username,
       uid: userInfo._id,
@@ -118,7 +119,16 @@ router.post('/user/login',function(req, res, next){
       httpOnly: false,
       signed: true
     });
-
+    res.cookie('admin', JSON.stringify({
+      username: userInfo.username,
+      uid: userInfo._id,
+      userInfo: userInfo.registerDay,
+      identity: userInfo.isAdmin
+    }),{
+      maxAge: 90000000,
+      httpOnly: false,
+      signed: true
+    });
     responseData.msg = "登录成功";
 
     // if(!req.session.userInfo){
@@ -138,6 +148,7 @@ router.post('/user/login',function(req, res, next){
 });
 
 router.get('/logout',(req, res)=>{
+  res.clearCookie('userInfo');
   responseData.code = 1;
   responseData.msg = "退出成功";
   res.json(responseData);

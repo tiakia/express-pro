@@ -10,14 +10,18 @@ const extractCSS = new ExtractTextPlugin('css/[name]-css.css');
 const extractLESS = new ExtractTextPlugin('css/[name]-less.css');
 const extractSCSS = new ExtractTextPlugin('css/[name]-scss.css');
 
+const isProduction = process.env.NODE_ENV === 'prod' ? true : false;
+
 const webpackPlugin = [
   new webpack.BannerPlugin({
-    banner: 'Author: tiankai',
+    banner: 'Author: tiankai; GitHub: https://github.com/tiakia',
     raw: false
   }),
-  //new CleanPlugin([path.resolve('public/output/*.js'),path.resolve('public/output/css/*.css')]),
+  new CleanPlugin([path.resolve('public/output/*.js'),path.resolve('public/output/css/*.css')]),
   //开启全局模块热替换
   new webpack.HotModuleReplacementPlugin(),
+  new webpack.NoEmitOnErrorsPlugin(),
+  //当模块热替换时在浏览器控制台输出对用户更友好的模块名字信息
   new webpack.NamedModulesPlugin(),
   // 提取公共模块
   new CommonsChunkPlugin({
@@ -26,10 +30,6 @@ const webpackPlugin = [
     minChunks: 2
   }),
   // 提取css
-  // new ExtractTextPlugin({
-  //   filename: 'css/style.css',
-  //   allChunks: true
-  // }),
   extractCSS,
   extractLESS,
   extractSCSS,
@@ -39,26 +39,45 @@ const webpackPlugin = [
   })
 ];
 
+
+if(isProduction){
+     webpackPlugin.push([
+         //对最终的js进行 Uglify 压缩
+         new UglifyJsPlugin({
+            compress: true,
+            test: /\.jsx?$/i,
+              parallel:{ //使用多进程并行和文件换成提高构建速度
+                cache: true,
+                workers:2
+            },
+            warnings: false
+         }),
+     ]);
+}
+
 module.exports = {
-  devtool: "cheap-module-eval-source-map",
-  devServer: {
-      historyApiFallback: {
-        index: './views/admin/index.html'
-      }
-  },
+  devtool: isProduction ? "eval" : "cheap-module-eval-source-map",
   entry:{
-    main: path.resolve('./public/src/js/index.js'),
-    admin: path.resolve('./public/src/js/admin/router.js')
+    main: [
+      'webpack-hot-middleware/client?http://localhost:8080',
+      'webpack/hot/only-dev-server',
+      path.resolve('./public/src/js/index.js')
+    ],
+    admin: [
+      'webpack-hot-middleware/client?http://localhost:8080/admin',
+      'webpack/hot/only-dev-server',
+      path.resolve('./public/src/js/admin/router.js')
+    ]
   },
   output:{
     path: __dirname +'/public/output/',
     filename: '[name].bundle.js',
-    publicPath: './public/output/'
+    publicPath: '/public/output/'
   },
   module: {
     loaders:[
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
@@ -74,7 +93,7 @@ module.exports = {
         use: extractSCSS.extract({
           fallback: 'style-loader',
           use: ["css-loader","postcss-loader","sass-loader"],
-          publicPath: './public/output/'
+          publicPath: '/public/output/'
         })
       },
       {
@@ -84,7 +103,7 @@ module.exports = {
         ],
         use: extractLESS.extract({
           use: ["css-loader","postcss-loader",'less-loader'],
-          publicPath: './public/output/'
+          publicPath: '/public/output/'
         })
       },
       {

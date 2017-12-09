@@ -197,9 +197,22 @@ export default class Aside extends Component{
       .then(data=> {
         if(data.code === 1){//退出成功，清除localStorage
           localStorage.removeItem('userInfo');
+          let cookies = document.cookie.split(';'),
+              userInfo = '';
+          cookies.map((val,item)=>{
+            if(val.indexOf('userInfo') === 0){
+              userInfo = val.split('=');
+            }
+          });
+          var exp = new Date();
+          exp.setTime(exp.getTime() - 1);
+          document.cookie = userInfo[0]+"="+userInfo[1] + ";expires="+exp.toGMTString();
+          console.log(userInfo);
           this.setState({
             mode: 'login'
           });
+        }else{
+          
         }
       }).catch(err=>console.log(err));
   }

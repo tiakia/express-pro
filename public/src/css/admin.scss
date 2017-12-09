@@ -25,3 +25,36 @@
     background: #fff;
     height: 100vh;
 }
+
+.breadcrumb{
+    margin:{
+        top: 10px;
+        bottom: 10px;
+        left: 16px;
+    }
+}
+
+.headerLayout{
+    background:{
+        color: #fff;
+    }
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding:{
+        right: 20px;
+    }
+}
+
+.contentContainer{
+    margin:{
+        left: 16px;
+        right: 16px;
+    }
+}
+
+.footerLayout{
+    text-align: center;
+}
