@@ -59,12 +59,12 @@ module.exports = {
   devtool: isProduction ? "eval" : "cheap-module-eval-source-map",
   entry:{
     main: [
-      'webpack-hot-middleware/client?http://localhost:8080',
+      'webpack-hot-middleware/client?reload=true&http://localhost:8080',
       'webpack/hot/only-dev-server',
       path.resolve('./public/src/js/index.js')
     ],
     admin: [
-      'webpack-hot-middleware/client?http://localhost:8080/admin',
+      'webpack-hot-middleware/client?reload=true&http://localhost:8080/admin',
       'webpack/hot/only-dev-server',
       path.resolve('./public/src/js/admin/router.js')
     ]

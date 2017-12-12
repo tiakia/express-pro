@@ -7,7 +7,30 @@ const SubMenu = Menu.SubMenu;
 
 export default class AdminAside extends Component {
   constructor(props){
-    super(props)
+    super(props);
+    this.state = {
+      currentUrl : '/userInfo'
+    }
+    this.handleSelectKey = this.handleSelectKey.bind(this);
+  }
+  componentDidMount(){
+    let url = location.pathname,
+          current = url.split('/admin')[1];
+    //console.log(current.length);
+    if(current.length == 0){
+      current = '/userInfo';
+    }else if(current =='/categoryEdit'){
+      current = '/category';
+    }
+    this.setState({
+      currentUrl: current
+    });
+  }
+  handleSelectKey(item,key,selectedKeys){
+    //console.log(item.key);
+    this.setState({
+      currentUrl: item.key
+    });
   }
   render(){
     return(
@@ -17,21 +40,25 @@ export default class AdminAside extends Component {
           >
             <div className="logo">
             </div>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} >
-               <Menu.Item key="1">
+             <Menu theme="dark"
+                   mode="inline"
+                   selectedKeys={[this.state.currentUrl]}
+                   onSelect={this.handleSelectKey}
+             >
+               <Menu.Item key="/userInfo">
                  <Link className="nav-text" to="/userInfo">
                     <Icon type="user"/>
                     用户信息
                  </Link>
                </Menu.Item>
                 <SubMenu key="category" title={<span><Icon type="appstore"/><span>分类</span></span>}>
-                   <Menu.Item key="3">
+                   <Menu.Item key="/category">
                      <Link className="nav-text" to="/category">
                          <Icon type="switcher"/>
                          分类信息
                       </Link>
                    </Menu.Item>
-                   <Menu.Item key="4">
+                   <Menu.Item key="/categoryAdd">
                       <Link className="nav-text" to="/categoryAdd">
                          <Icon type="plus-square"/>
                          分类添加

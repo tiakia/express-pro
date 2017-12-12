@@ -45,6 +45,9 @@ const AvatarDrop = (
 class AdminLayoutShowLocation extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      activeUrl : null
+    }
   }
   componentWillMount(){
 

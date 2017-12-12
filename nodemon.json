@@ -1,0 +1,4 @@
+{
+  "verbose": true,
+  "ignore": ["db/","public/*","*.json","*.md","*.config.js",".babelrc",".gitignore","node_modeules/*"]
+}

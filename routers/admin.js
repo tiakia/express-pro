@@ -87,7 +87,8 @@ router.get('/category', (req, res)=>{
   Category.count().then(totalCount => {
     responseData.pagination.total = totalCount;
   });
-  Category.find().limit(limit).skip(skip).then(function(category){
+  /*1: 升序 -1: 降序*/
+  Category.find().sort({_id: -1}).limit(limit).skip(skip).then(function(category){
     responseData.data = category;
     res.send(responseData);
   });
@@ -192,7 +193,16 @@ router.post('/category/edit',(req, res, next)=>{
 
 router.get('/category/del',(req, res, next)=>{
   let categoryId = req.query.id || '';
-  console.log(categoryId);
+  Category.findOne({
+    _id: categoryId,
+  }).then(category=>{
+    //console.log(category);
+    if(!category){
+      responseData.code = -1;
+      responseData.msg = '要删除的分类不存在';
+      res.json(responseData);
+      return;
+    }else{
       Category.remove({
         _id: categoryId
       }).then(()=>{
@@ -201,26 +211,8 @@ router.get('/category/del',(req, res, next)=>{
         res.json(responseData);
         return;
       });
-  // Category.findOne({
-  //   _id: categoryId,
-  // }).then(category=>{
-  //   console.log(category);
-  //   if(!category){
-  //     responseData.code = -1;
-  //     responseData.msg = '要删除的分类不存在';
-  //     res.json(responseData);
-  //     return;
-  //   }else{
-  //     Category.remove({
-  //       _id: id
-  //     }).then(()=>{
-  //       responseData.code = 1;
-  //       responseData.msg = '删除成功';
-  //       res.json(responseData);
-  //       return;
-  //     });
-  //   }
-  // });
+    }
+  }).catch(err => console.log(err));
 });
 
 module.exports = router;

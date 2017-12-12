@@ -29,6 +29,7 @@ class CategoryAddForm extends Component {
         //console.log(data);
         if(data.code === 2){
           message.success('添加成功');
+          history.go(-1);
         }else if( data.code === 1){
           message.warn('该分类已经存在');
         }else if(data.code === -1){

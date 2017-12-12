@@ -59,7 +59,7 @@ small.save(function(err){
 水平有限，现在的做法就是先把 public 文件夹里面的静态资源打包然后引用给 views 文件夹里的html  
 
 #### 使用fetch做post请求，数据获取问题
-××前端××  
+### 前端
 1.要注意请求头的设置,在请求时一定要规定请求数据格式时json格式的  
 2.请求数据`JSON.stringify()`转化    
 例子：
@@ -84,7 +84,7 @@ fetch('/api/user/register',{
   .catch(err => console.error(err));
 ```
 
-××后端node××  
+### 后端node  
 1.引入`body-parser`中间件  
 ```
 const bodyParser = require('body-parser');
@@ -129,4 +129,18 @@ Cannot read property 'className' of undefined
 <Dropdown overlay={AvatarDrop} trigger={['click']}>
    <Avatar icon="user" style={{backgroundColor: '#87d068'}}/>
 </Dropdown>
+```
+#### nodemon 实现修改后台代码自动重启服务器(ctrl+c + node app.js)
+#### 通过获得`url`渲染`Menu`的`selectedKeys`
+#### webpack-dev-middleware 和 webpack-hot-middleware 实现在node端的热加载,注意入口文件的配置`reload=true`
+### 前端渲染内容模块
+导航 －－ NavLink
+无论点击哪个分类都加载 main 模块   
+在模块内部请求 后台的中间件处理请求  
+通过请求的路径 去数据库中查询
+
+
+### mongodb数据库连接命令
+```
+mongod.exe --dbpath=F:\demo\nodeDemo\express-blog\db --port=27018
 ```

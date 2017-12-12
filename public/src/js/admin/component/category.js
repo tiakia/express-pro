@@ -23,7 +23,7 @@ const categoryColumns = [{
           search: `?id=${record.categoryId}`,
           state: { categoryData: data }
         }} style={{marginRight: 5}}>修改</Link>
-        <Popconfirm title="是否确定要删除？" onConfirm={()=>confirmDel(record.categoryId)} okText="是" cancelText="否">
+                <Popconfirm title="是否确定要删除？" onConfirm={()=>confirmDel(record.categoryId)} okText="是" cancelText="否">
           <a href="javascript:void(0);">删除</a>
         </Popconfirm>
       </span>
@@ -32,8 +32,7 @@ const categoryColumns = [{
 }];
 
 function confirmDel(id){
-  //console.log(id);
-  fetch(`/admin/category/del?id=${JSON.stringify(id)}`,{
+  fetch(`/admin/category/del?id=${id}`,{
     method: 'GET',
     mode: 'cors',
     headers:{
@@ -47,6 +46,9 @@ function confirmDel(id){
         message.error(data.msg);
       }else{
         message.success(data.msg);
+        let timer = setTimeout(()=>{
+          history.go(0);timer = null;
+        },300);
       }
     });
 }
