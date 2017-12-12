@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Divider } from 'antd';
+import { Table, Popconfirm, message } from 'antd';
 import { Link } from 'react-router-dom';
 
 const categoryColumns = [{
@@ -23,15 +23,33 @@ const categoryColumns = [{
           search: `?id=${record.categoryId}`,
           state: { categoryData: data }
         }} style={{marginRight: 5}}>修改</Link>
-
-        <Link to={{
-          pathname: '/categoryDel',
-          search: `?id=${record.categoryId}`
-        }}>删除</Link>
+        <Popconfirm title="是否确定要删除？" onConfirm={()=>confirmDel(record.categoryId)} okText="是" cancelText="否">
+          <a href="javascript:void(0);">删除</a>
+        </Popconfirm>
       </span>
     )
   }
 }];
+
+function confirmDel(id){
+  //console.log(id);
+  fetch(`/admin/category/del?id=${JSON.stringify(id)}`,{
+    method: 'GET',
+    mode: 'cors',
+    headers:{
+      "Accept": 'application/json',
+      "Content-type": 'application/json'
+    },
+    credentials: 'include'
+  }).then(response => response.json())
+    .then(data=>{
+      if(data.code<0){
+        message.error(data.msg);
+      }else{
+        message.success(data.msg);
+      }
+    });
+}
 
 export default class Category extends Component {
   constructor(props){

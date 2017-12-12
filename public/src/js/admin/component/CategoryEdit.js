@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Button, Input } from 'antd';
+import { Form, Button, Input, message } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -12,11 +12,10 @@ class CategoryEditForm extends Component {
       categoryName: null
     }
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.Fetch = this.Fetch.bind(this);
   }
   componentDidMount(){
     const categoryData = this.props.history.location.state.categoryData;
-    console.log(categoryData);
+    //console.log(categoryData);
     this.setState({
       categoryId: categoryData.id,
       categoryName: categoryData.categoryName
@@ -25,37 +24,44 @@ class CategoryEditForm extends Component {
   handleSubmit(e){
     e.preventDefault();
     this.props.form.validateFields((err, values)=>{
+      const data = JSON.stringify({
+        categoryId: this.state.categoryId,
+        categoryName: values.categoryName
+      });
       if(!err){
-        console.log(values);
+        fetch('/admin/category/edit',{
+          method: "POST",
+          mode: 'cors',
+          headers:{
+            "Accept": 'application/json',
+            "Content-type": 'application/json'
+          },
+          credentials: 'include',
+          body: data
+         }).then(response => response.json())
+           .then(data=>{
+             if(data.code<0){
+               message.warn(data.msg);
+             }else{//success
+               message.success(data.msg);
+               history.go(-1);
+             }
+            });
       }
     });
-  }
-  Fetch(url){
-    fetch(url,{
-      method: "GET",
-      mode: 'cors',
-      headers:{
-        "Accept": 'application/json',
-        "Content-type": 'application/json'
-      },
-      credentials: 'include'
-    }).then(response => response.json())
-      .then(data=>{
-        console.log(data);
-      });
   }
   render(){
     const { getFieldDecorator } = this.props.form;
     return(
         <div className="contentLayout">
-          <h3>分类编辑 － {this.state.categoryName}</h3>
+        <h4 style={{marginBottom: 15}}>分类名称 － {this.state.categoryName}</h4>
           <Form layout="inline" onSubmit={e => this.handleSubmit(e)}>
             <FormItem>
                 {
                   getFieldDecorator('categoryName',{
                     rules:[{ required: true, message: '请输入修改后的分类名称'}]
                   })(
-                    <Input type="text" placeholder="分类名称"/>
+                    <Input type="text" placeholder="新分类名称"/>
                   )}
             </FormItem>
             <FormItem>

@@ -13,10 +13,31 @@ const breadcrumbNameMap = {
   '/categoryDel': '分类删除'
 }
 
+function Logout(){
+  localStorage.removeItem('userInfo');
+  let Cookies = document.cookie.split(';'),
+      userInfo = null;
+  Cookies.map((val,item)=>{
+    if(val.indexOf('userInfo') === 0){
+      userInfo = val.split('=');
+    }
+  });
+  let exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  document.cookie = userInfo[0]+"="+userInfo[1]+';expires='+exp.toGMTString();
+  history.go(0);
+}
+const UserInfo = JSON.parse(localStorage.getItem('userInfo'));
 const AvatarDrop = (
       <Menu>
         <Menu.Item key="0">
-           admin
+         用户名： {UserInfo.username}
+        </Menu.Item>
+        <Menu.Item key="1">
+          注册日期：{UserInfo.date}
+        </Menu.Item>
+        <Menu.Item key="2">
+           <a onClick={()=>Logout()}>退出</a>
         </Menu.Item>
       </Menu>
 );

@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 
 const FormItem =  Form.Item;
 
@@ -28,7 +28,11 @@ class CategoryAddForm extends Component {
       .then( data => {
         //console.log(data);
         if(data.code === 2){
-          alert("添加成功");
+          message.success('添加成功');
+        }else if( data.code === 1){
+          message.warn('该分类已经存在');
+        }else if(data.code === -1){
+          message.error('请输入分类名称');
         }
       })
   }

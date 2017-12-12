@@ -207,12 +207,12 @@ export default class Aside extends Component{
           var exp = new Date();
           exp.setTime(exp.getTime() - 1);
           document.cookie = userInfo[0]+"="+userInfo[1] + ";expires="+exp.toGMTString();
-          console.log(userInfo);
+          //console.log(userInfo);
           this.setState({
             mode: 'login'
           });
         }else{
-          
+          alert('请稍后重试');
         }
       }).catch(err=>console.log(err));
   }

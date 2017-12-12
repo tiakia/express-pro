@@ -119,16 +119,6 @@ router.post('/user/login',function(req, res, next){
       httpOnly: false,
       signed: true
     });
-    res.cookie('admin', JSON.stringify({
-      username: userInfo.username,
-      uid: userInfo._id,
-      userInfo: userInfo.registerDay,
-      identity: userInfo.isAdmin
-    }),{
-      maxAge: 90000000,
-      httpOnly: false,
-      signed: true
-    });
     responseData.msg = "登录成功";
 
     // if(!req.session.userInfo){
