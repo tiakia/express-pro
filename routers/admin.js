@@ -8,11 +8,20 @@ router.use(function(req, res, next){
   try{
     //判断cookie中userInfo是否存在
     let userObj = req.signedCookies.userInfo && JSON.parse(req.signedCookies.userInfo);
-
+    let responseData = {
+      code: 0,
+      msg: ''
+    };
     //console.log(userObj);
 
     if(!userObj){
-      res.send("请重新<a href='/'>登录</a>");
+      //res.send("请重新<a href='/'>登录</a>");
+      responseData.code = -1;
+      responseData.msg = '请重新登录';
+      //res.json(responseData);
+      res.render('admin/error',{
+        responseData: responseData
+      });
       return;
     }
     //如果存在，判断是否为管理员

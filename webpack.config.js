@@ -107,15 +107,16 @@ module.exports = {
         })
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)$/,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 10000,
-              name: './public/image/[name]-[hash:5].[ext]'
-            }
-          },
+          'file-loader',
+          // {
+          //   loader: "url-loader",
+          //   options: {
+          //     limit: 10000,
+          //     name: './public/image/[name]-[hash:5].[ext]'
+          //   }
+          // },
           "image-webpack-loader"
          ]
       },

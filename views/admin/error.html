@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-title" content="Error">
+    <meta name="author" content="Tiankai">
+    <!--<link rel="shortcut icon" type="image/ico" href="/favicon.ico" />-->
+    <link href="/public/output/css/admin-scss.css" rel="stylesheet" type="text/css">
+    <title>Error</title>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: #F2F3E1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="error">
+      <div class="error-img center">
+        <span class="error-font">出错了(Error)</span>
+      </div>
+      <div class="center">
+         <a href="javascript:void(0)" onclick="clearStorage();">重新登录</a>
+      </div>
+    </div>
+    <script>
+      function clearStorage(){
+        localStorage.removeItem('userInfo');
+        location.href = '/';
+      }
+    </script>
+  </body>
+</html>

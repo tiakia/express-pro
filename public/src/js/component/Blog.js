@@ -10,7 +10,7 @@ export default class Blog extends Component {
     this.state = {
       title : title,
       nav : []
-    }
+    };
   }
   componentWillMount(){
     fetch('/nav',{
@@ -42,7 +42,7 @@ export default class Blog extends Component {
           <Aside/>
         </div>
         </div>
-    )
+    );
   }
 }
 
@@ -55,7 +55,7 @@ export class Header extends Component {
         <header className="flex" >
           <h1>{this.props.title}</h1>
         </header>
-    )
+    );
   }
 }
 
@@ -69,11 +69,11 @@ export class Nav extends Component {
           <ul className="flex" >
              {
                this.props.nav.map((val, idx) => {
-                 return <li key={idx}><a href={"/"+val.name} >{val.name == "Home" ? "首页" : val.name}</a></li>
+                 return <li key={idx}><a href={"/"+val.name} >{val.name == "Home" ? "首页" : val.name}</a></li>;
                })
              }
           </ul>
         </nav>
-    )
+    );
   }
 }

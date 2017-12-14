@@ -42,7 +42,7 @@ export default class Aside extends Component{
          userInfo: userObj
       });
     }
-    
+
   }
   handleMode(){
     this.setState((prevState) => {
@@ -136,14 +136,14 @@ export default class Aside extends Component{
             this.setState({
               mode: "login-success",
               msg: '',
-              userInfo: user_info              
+              userInfo: user_info
             });
           },800);
           let user_info_data = {
             username: user_info.username,
             date: user_info.date,
             identity: user_info.identity
-          }
+          };
           localStorage.setItem('userInfo',JSON.stringify(user_info_data));
         }
         this.setState({
@@ -153,7 +153,7 @@ export default class Aside extends Component{
       .catch( (err) => console.log(err));
   }
   handleRegister(){
-    let registerDay = new Date().getFullYear() +"年"+(new Date().getMonth()+1) +"月"+new Date().getDate() + "日"; 
+    let registerDay = new Date().getFullYear() +"年"+(new Date().getMonth()+1) +"月"+new Date().getDate() + "日";
     const data = JSON.stringify({
       username: this.state.form.userName.value,
       password: this.state.form.password.value,
@@ -229,7 +229,7 @@ export default class Aside extends Component{
                      formData = {this.state.form}
                      focusFun = {this.handleFocus}
               /> :
-            this.state.mode === 'register'?              
+            this.state.mode === 'register'?
               <Register changeMode={this.handleMode}
                         usernameChange = {this.handleValChange}
                         passwordChange = {this.handleValChange}
@@ -258,7 +258,7 @@ class Register extends Component {
           <AsideHead title="注册"/>
           <Input labelName="用户名"
                  inputName="userName"
-                 inputType="text"                   
+                 inputType="text"
                  handleChange={this.props.usernameChange}
                  errorInfo={this.props.formData.userName.error}
                  handleFocus={this.props.focusFun}
@@ -298,7 +298,7 @@ class Login extends Component {
           <AsideHead title="登录"/>
           <Input labelName="用户名"
                  inputName="userName"
-                 inputType="text"                   
+                 inputType="text"
                  handleChange={(e) => this.props.usernameChange(e) }
                  errorInfo={this.props.formData.userName.error}
                  handleFocus={this.props.focusFun}
@@ -315,7 +315,7 @@ class Login extends Component {
            <strong>{this.props.message}</strong>
             有帐号
             <a onClick={this.props.changeMode} >去注册</a>
-          </div>        
+          </div>
         </div>
     )
   }
@@ -389,7 +389,7 @@ class Input extends Component{
 
 class Button extends Component {
     constructor(props){
-      super(props);    
+      super(props);
     }
     render(){
         return(
@@ -398,4 +398,4 @@ class Button extends Component {
           </button>
         )
     }
-}        
+}

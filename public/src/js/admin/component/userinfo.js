@@ -87,7 +87,7 @@ export default class UserInfo extends Component {
           });
           //console.log(userInfoData);
         }
-      })
+      });
   }
   render(){
     return(
@@ -98,6 +98,6 @@ export default class UserInfo extends Component {
                  onChange={pagination => this.getUserInfo(pagination.current)}
           />
        </div>
-    )
+    );
   }
 }
