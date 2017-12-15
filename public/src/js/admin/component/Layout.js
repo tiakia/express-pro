@@ -10,7 +10,9 @@ const breadcrumbNameMap = {
   '/category': '分类',
   '/categoryAdd': '分类添加',
   '/categoryEdit': '分类编辑',
-  '/categoryDel': '分类删除'
+  '/categoryDel': '分类删除',
+  '/content': '内容首页',
+  '/contentAdd': '内容添加'
 }
 
 function Logout(){

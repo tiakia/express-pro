@@ -10,7 +10,7 @@ export default class AdminAside extends Component {
     super(props);
     this.state = {
       currentUrl : '/userInfo'
-    }
+    };
     this.handleSelectKey = this.handleSelectKey.bind(this);
   }
   componentDidMount(){
@@ -65,12 +65,20 @@ export default class AdminAside extends Component {
                       </Link>
                    </Menu.Item>
                </SubMenu>
-               <Menu.Item key="33">
-                  <a className="nav-text">
-                     <Icon type="upload"/>
-                     nav 3
-                  </a>
-               </Menu.Item>
+                <SubMenu key="content" title={<span><Icon type="folder-open"/><span>内容管理</span></span>}>
+                   <Menu.Item key="/content">
+                     <Link className="nav-text" to="/content">
+                         <Icon type="folder"/>
+                         内容首页
+                      </Link>
+                   </Menu.Item>
+                   <Menu.Item key="/contentAdd">
+                      <Link className="nav-text" to="/contentAdd">
+                         <Icon type="folder-add"/>
+                         内容添加
+                      </Link>
+                   </Menu.Item>
+               </SubMenu>
                <Menu.Item key="44">
                   <a className="nav-text">
                      <Icon type="user"/>

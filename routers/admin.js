@@ -224,4 +224,33 @@ router.get('/category/del',(req, res, next)=>{
   }).catch(err => console.log(err));
 });
 
+
+/*
+ 内容添加
+*/
+
+router.get('/contentAdd',(req,res)=>{
+  Category.find().sort({_id: -1}).then(categories=>{
+    if(!categories){
+      responseData.code = -1;
+      responseData.msg = '分类查找失败';
+      res.json(resposneData);
+      return;
+    }
+    responseData.options = categories;
+    res.json(responseData);
+    return;
+  });
+});
+
+router.post('/contentAdd',(req, res)=>{
+
+});
+
+
+
+
+
+
+
 module.exports = router;

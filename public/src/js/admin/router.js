@@ -6,6 +6,7 @@ import UserInfo from './component/UserInfo';
 import Category from './component/Category';
 import CategoryAdd from './component/CategoryAdd';
 import CategoryEdit from './component/CategoryEdit';
+import ContentAdd from './component/ContentAdd';
 import "./../../css/admin.scss";
 
 render((
@@ -16,6 +17,7 @@ render((
          <Route path="/category" component={Category}/>
          <Route path="/categoryAdd" component={CategoryAdd}/>
          <Route path="/categoryEdit" component={CategoryEdit}/>
+         <Route path="/contentAdd" component={ContentAdd}/>
       </AdminLayout>
     </BrowserRouter>
 ),document.getElementById('admin'));
