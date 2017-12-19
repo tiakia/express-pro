@@ -3,6 +3,7 @@ var router = express.Router();
 var queryString = require('queryString');
 var User = require('./../models/User');
 var Category = require('./../models/Categories');
+var Content = require('./../models/Content');
 //获取用户信息判断是否是管理员
 router.use(function(req, res, next){
   try{
@@ -58,7 +59,7 @@ router.use(function(req, res, next){
       pageSize: 0,
       data: null
     }
-  }
+  };
   next();
 });
 
@@ -152,7 +153,7 @@ router.post('/category/edit',(req, res, next)=>{
   let id = req.body.categoryId || '',
       newName = req.body.categoryName;
   Category.findOne({
-    _id: id,
+    _id: id
   }).then(category=>{
     if(!category){
       responseData.code = -3;
@@ -243,13 +244,86 @@ router.get('/contentAdd',(req,res)=>{
   });
 });
 
+/*
+ 内容保存
+**/
 router.post('/contentAdd',(req, res)=>{
-
+  console.log(req.body);
+  let contentData = req.body || '',
+      _categoryName = contentData.categoryName,
+      title = contentData.title,
+      shortDes = contentData.shortDes,
+      _content = contentData.content;
+  if(!_categoryName || !title || !shortDes || !_content){
+    responseData.code = -1;
+    responseData.msg = '信息不完善，请重新填写！';
+    res.json(responseData);
+    return;
+  }
+  Category.findOne({
+    name: _categoryName
+  }).then(category=>{
+    if(!category){
+      responseData.code = -2;
+      responseData.msg = '分类不存在';
+      res.json(responseData);
+      return;
+    }
+    Content.findOne({
+      title: title,
+      category: _categoryName
+    }).then(content=>{
+      if(content){
+        responseData.code = -3;
+        responseData.msg = '数据库中该分类下已经有了该标题的文章';
+        res.json(responseData);
+        return;
+      }
+      return new Content({
+               category: _categoryName,
+               title: title,
+               description: shortDes,
+               content: _content
+             }).save();
+      }).then(content=>{
+           if(content){
+             responseData.code = 1;
+             responseData.msg = '添加成功';
+             res.json(responseData);
+             return;
+           }
+         });
+    }).catch(err=>console.log(err));
 });
 
+/*
+内容首页
+**/
+router.get('/content',(req, res)=>{
+  let page = req.query.page || 1,
+      limit = 10,
+      skip = (page - 1) * 10;
+  responseData.pagination.pageSize = limit;
+  Content.count().then(totalCount=>{
+    responseData.pagination.total = totalCount;
+  });
+  Content.find().sort({_id: -1}).limit(limit).skip(skip).populate().then((content)=>{
+    responseData.data = content;
+    res.send(responseData);
+  }).catch(err=>console.log(err));
+});
 
+/*
+内容修改
+**/
+router.get('/content/edit',(req,res)=>{
+  let id = req.query.id || '';
+  Category.find({
 
+  }).then(categories=>{
 
+  });
+});
 
 
 

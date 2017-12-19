@@ -7,6 +7,8 @@ import Category from './component/Category';
 import CategoryAdd from './component/CategoryAdd';
 import CategoryEdit from './component/CategoryEdit';
 import ContentAdd from './component/ContentAdd';
+import Content from './component/Content';
+import ContentEdit from './component/ContentEdit';
 import "./../../css/admin.scss";
 
 render((
@@ -18,6 +20,8 @@ render((
          <Route path="/categoryAdd" component={CategoryAdd}/>
          <Route path="/categoryEdit" component={CategoryEdit}/>
          <Route path="/contentAdd" component={ContentAdd}/>
+         <Route path="/content" component={Content}/>
+         <Route path="/contentEdit" component={ContentEdit}/>
       </AdminLayout>
     </BrowserRouter>
 ),document.getElementById('admin'));

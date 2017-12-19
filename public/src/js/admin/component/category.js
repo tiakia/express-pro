@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 const categoryColumns = [{
   title: 'ID',
   dataIndex: 'categoryId',
-  key: 'categoryId',
+  key: 'categoryId'
 },{
   title: '分类名称',
   dataIndex: 'categoryName',
-  key: 'categoryName',
+  key: 'categoryName'
 },{
   title: '操作',
   dataIndex: '',
@@ -20,14 +20,13 @@ const categoryColumns = [{
       <span>
         <Link to={{
           pathname: '/categoryEdit',
-          search: `?id=${record.categoryId}`,
           state: { categoryData: data }
         }} style={{marginRight: 5}}>修改</Link>
-                <Popconfirm title="是否确定要删除？" onConfirm={()=>confirmDel(record.categoryId)} okText="是" cancelText="否">
+        <Popconfirm title="是否确定要删除？" onConfirm={()=>confirmDel(record.categoryId)} okText="是" cancelText="否">
           <a href="javascript:void(0);">删除</a>
         </Popconfirm>
       </span>
-    )
+    );
   }
 }];
 
@@ -58,8 +57,8 @@ export default class Category extends Component {
     super(props);
     this.state = {
       categoryData: null,
-      categoryPagination: null,
-    }
+      categoryPagination: null
+    };
     //this.mapCategory = this.mapCategory.bind(this);
     this.getCategory = this.getCategory.bind(this);
   }
@@ -96,7 +95,7 @@ export default class Category extends Component {
         "Accept": "application/json",
         "Content-type": "application/json"
       },
-      credentials: 'include',
+      credentials: 'include'
     }).then(response => response.json())
       .then( categoryData => {
         //console.log(categoryData);
@@ -112,7 +111,7 @@ export default class Category extends Component {
           categoryData: dataSource,
           categoryPagination: categoryData.pagination
         });
-      })
+      });
   }
   render(){
     return(
@@ -123,6 +122,6 @@ export default class Category extends Component {
                  onChange={pagination => this.getCategory(pagination.current)}
           />
        </div>
-    )
+    );
   }
 }

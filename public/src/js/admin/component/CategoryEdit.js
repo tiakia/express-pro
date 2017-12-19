@@ -10,7 +10,7 @@ class CategoryEditForm extends Component {
     this.state = {
       categoryId: null,
       categoryName: null
-    }
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount(){

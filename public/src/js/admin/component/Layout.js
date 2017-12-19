@@ -12,8 +12,9 @@ const breadcrumbNameMap = {
   '/categoryEdit': '分类编辑',
   '/categoryDel': '分类删除',
   '/content': '内容首页',
-  '/contentAdd': '内容添加'
-}
+  '/contentAdd': '内容添加',
+  '/contentEdit': '内容修改'
+};
 
 function Logout(){
   localStorage.removeItem('userInfo');
