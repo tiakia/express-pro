@@ -30,8 +30,8 @@ class ContentAdd extends Component {
     valiForm.validateFields((err, values)=>{
       if(!err){
         const data = JSON.stringify(values);
-        console.log(values);
-        fetch('/admin/contentAdd',{
+        //console.log(values);
+        fetch('/admin/content/add',{
           method: 'POST',
           mode: 'cors',
           headers:{
@@ -47,7 +47,7 @@ class ContentAdd extends Component {
                   message: data.msg
                 });
             }else{
-                notification['success']({
+              notification['success']({
                   message: data.msg
                 });
             }
@@ -58,9 +58,7 @@ class ContentAdd extends Component {
   render(){
     return(
         <div>
-          <ContentForm options={this.state.options}
-                       handleSubmit={this.handleSubmit}
-          />
+          <ContentForm handleSubmit={this.handleSubmit}/>
         </div>
     );
   }

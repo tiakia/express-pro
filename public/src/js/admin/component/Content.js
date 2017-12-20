@@ -5,7 +5,7 @@
 */
 
 import React, { Component } from 'react';
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, message } from 'antd';
 import { Link } from 'react-router-dom';
 
 const contentColumns = [{
@@ -21,9 +21,21 @@ const contentColumns = [{
   dataIndex: 'contentCat',
   key: 'contentCat'
 },{
+  title: '作者',
+  dataIndex: 'user',
+  key: 'user'
+},{
+  title: '添加时间',
+  dataIndex: 'addTime',
+  key: 'addTime'
+},{
   title: '摘要',
   dataIndex: 'shortDes',
   key: 'shortDes'
+},{
+  title: '阅读量',
+  dataIndex: 'views',
+  key: 'views'
 },{
   title: '操作',
   dataIndex: '',
@@ -55,7 +67,6 @@ function confirmDel(id){
     credentials: 'include'
   }).then(response => response.json())
     .then(data=>{
-      console.log(data);return;
       if(data.code<0){
         message.error(data.msg);
       }else{
@@ -97,12 +108,14 @@ export default class Content extends Component {
     }).then(response => response.json())
       .then( contentData => {
         const dataSource = [];
-        //console.log(contentData);
         contentData.data.map((val, item)=>{
           dataSource.push({
             key: val._id.toString(),
             contentId: val._id.toString(),
             contentTitle: val.title,
+            user: val.user.username,
+            addTime: val.addTime,
+            views: val.views,
             contentCat: val.category,
             shortDes: val.description
           });

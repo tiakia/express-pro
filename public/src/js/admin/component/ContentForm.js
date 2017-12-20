@@ -14,11 +14,12 @@ class ContentLayout extends Component {
   constructor(props){
     super(props);
     this.state = {
-      options: []
+      options: [],
+      contentData: props.contentVal
     };
   }
   componentWillMount(){
-   fetch('/admin/contentAdd',{
+   fetch('/admin/content/add',{
       mode: 'cors',
       method: 'GET',
       headers:{
@@ -37,17 +38,28 @@ class ContentLayout extends Component {
 
   }
   componentWillReceiveProps(nextProps){
-    // if(nextProps.options.length != 0){
-    //   this.setState({
-    //     options: nextProps.options
-    //   });
-    // }
+
   }
   render(){
     const { getFieldDecorator } = this.props.form;
     return(
         <div className="contentLayout">
            <Form onSubmit={e => this.props.handleSubmit(e,this.props.form)}>
+        {
+          this.props.contentVal ?
+               <FormItem>
+                    {
+                      getFieldDecorator('contentId',{
+                        initialValue: this.props.contentVal._id
+                      })(
+                          <Input disabled={true}/>
+                      )
+                    }
+               </FormItem>
+            : <FormItem>
+
+              </FormItem>
+        }
               <FormItem
                   label="分类"
               >
@@ -58,7 +70,8 @@ class ContentLayout extends Component {
                          required: true,
                          message: '请选择一个分类'
                        }
-                     ]
+                     ],
+                     initialValue: this.props.contentVal ? this.props.contentVal.category : ''
                    })(
                       <Select
                          placeholder="选择一个分类"
@@ -66,7 +79,9 @@ class ContentLayout extends Component {
                          showSearch = {true}
                          filterOption={(input, option)=> option.props.children.toLowerCase().indexOf(input.toLowerCase())>=0}
                       >
-                       {this.state.options.map(val => <Select.Option key={val.name}>{val.name}</Select.Option>)}
+                       {
+                         this.state.options.map(val => <Select.Option key={val.name}>{val.name}</Select.Option>)
+                       }
                       </Select>
                    )
                  }
@@ -78,10 +93,11 @@ class ContentLayout extends Component {
                       getFieldDecorator('title',{
                         rules: [{
                           required: true,
-                          message: '请输入标题'
-                        }]
+                          message: '请输入标题',
+                        }],
+                        initialValue: this.props.contentVal ? this.props.contentVal.title : ''
                       })(
-                           <Input placeholder="请输入标题"/>
+                          <Input placeholder="请输入标题"/>
                       )
                     }
                </FormItem>
@@ -91,7 +107,8 @@ class ContentLayout extends Component {
                         rules:[{
                           required: true,
                           message: '请输入简介'
-                        }]
+                        }],
+                        initialValue: this.props.contentVal ? this.props.contentVal.description : ''
                       })(
                            <TextArea placeholder="请输入内容简介"/>
                       )
@@ -104,7 +121,8 @@ class ContentLayout extends Component {
                         rules:[{
                           required: true,
                           message: '请输入内容'
-                        }]
+                        }],
+                        initialValue: this.props.contentVal ? this.props.contentVal.content : ''
                       })(
                           <TextArea placeholder="请输入内容" rows={10}/>
                       )

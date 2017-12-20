@@ -6,17 +6,16 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Button, Input, message } from 'antd';
+import { Form, Button, Input, notification } from 'antd';
 import ContentForm from './ContentForm';
 
 const FormItem = Form.Item;
 
-class ContentEditForm extends Component {
+class ContentEdit extends Component {
   constructor(props){
     super(props);
     this.state = {
-      contentId: null,
-      options: []
+      contentData: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -33,7 +32,10 @@ class ContentEditForm extends Component {
       credentials: 'include'
     }).then(response => response.json())
       .then(data =>{
-        console.log(data);
+        //console.log(data);
+        this.setState({
+          contentData: data
+        });
       });
   }
   componentDidMount(){
@@ -42,21 +44,48 @@ class ContentEditForm extends Component {
   componentWillReceiveProps(nextProps){
 
   }
-  handleSubmit(e){
+  handleSubmit(e,valiForm){
     e.preventDefault();
+    valiForm.validateFields((err, values)=>{
+      if(!err){
+        const data = JSON.stringify(values);
+        fetch('/admin/content/edit',{
+          method: 'POST',
+          mode: 'cors',
+          headers:{
+            "Accept": 'application/json',
+            "Content-type": "application/json"
+          },
+          credentials: 'include',
+          body: data
+        }).then(response => response.json())
+          .then(data=>{
+            if(data.code<0){//失败
+                notification['error']({
+                  message: data.msg
+                });
+            }else{
+                notification['success']({
+                  message: data.msg
+                });
+               let timer = setTimeout(()=>{
+                  history.go(-1);timer = null;
+               },300);
+            }
+          });
+      }
+    });
   }
   render(){
-    const { getFieldDecorator } = this.props.form;
     return(
         <div className="contentLayout">
-          <ContentForm options={this.state.options}
-                       handleSubmit={this.handleSubmit}
+          <ContentForm handleSubmit={this.handleSubmit}
+                       contentVal={this.state.contentData}
           />
         </div>
     );
   }
 }
 
-const ContentEdit = Form.create()(ContentEditForm);
 
 export default ContentEdit;

@@ -119,7 +119,7 @@ router.get('/category/add',(req, res, next)=>{
 
   Category.findOne({
     name: category_name
-  }).then((categoryName)=>{
+  }).then(categoryName=>{
     //console.log(categoryName);
     if(categoryName){
       responseData.code = 1;
@@ -137,6 +137,7 @@ router.get('/category/add',(req, res, next)=>{
     if(newCategory){
       responseData.code = 2;
       responseData.msg = "分类添加成功";
+      responseData.url = '/category';
       res.json(responseData);
       return;
     }
@@ -152,22 +153,18 @@ router.get('/category/add',(req, res, next)=>{
 router.post('/category/edit',(req, res, next)=>{
   let id = req.body.categoryId || '',
       newName = req.body.categoryName;
+  if(!id || !newName){
+    responseData.code = -1;
+    responseData.msg = '信息不完善，请重新填写';
+    res.json(responseData);
+    return;
+  }
   Category.findOne({
     _id: id
   }).then(category=>{
     if(!category){
-      responseData.code = -3;
-      responseData.msg = '分类不存在，请重新操作';
-      res.json(responseData);
-      return;
-    }else if(category.name.length == 0){
       responseData.code = -2;
-      responseData.msg = '请输入一个分类名';
-      res.json(responseData);
-      return;
-    }else if(category.name == newName){
-      responseData.code = -3;
-      responseData.msg = '没有做修改';
+      responseData.msg = '分类不存在，请重新操作';
       res.json(responseData);
       return;
     }else{
@@ -178,7 +175,7 @@ router.post('/category/edit',(req, res, next)=>{
     }
   }).then((data)=>{
     if(data){
-      responseData.code = -1;
+      responseData.code = -3;
       responseData.msg = '数据库中已经有了该分类';
       res.json(responseData);
       return;
@@ -187,14 +184,14 @@ router.post('/category/edit',(req, res, next)=>{
         _id: id
       },{
         name: newName
-      });
+      }).then(()=>{
+         responseData.code = 1;
+         responseData.msg = '修改成功';
+         res.json(responseData);
+         return;
+     }).catch(err=>console.log(err));
     }
-  }).then(()=>{
-      responseData.code = 1;
-      responseData.msg = '修改成功';
-      res.json(responseData);
-      return;
-  });
+  }).catch(err=>console.log(err));
 });
 
 /*
@@ -220,7 +217,7 @@ router.get('/category/del',(req, res, next)=>{
         responseData.msg = '删除成功';
         res.json(responseData);
         return;
-      });
+      }).catch(err=>console.log(err));
     }
   }).catch(err => console.log(err));
 });
@@ -230,7 +227,7 @@ router.get('/category/del',(req, res, next)=>{
  内容添加
 */
 
-router.get('/contentAdd',(req,res)=>{
+router.get('/content/add',(req,res)=>{
   Category.find().sort({_id: -1}).then(categories=>{
     if(!categories){
       responseData.code = -1;
@@ -241,19 +238,21 @@ router.get('/contentAdd',(req,res)=>{
     responseData.options = categories;
     res.json(responseData);
     return;
-  });
+  }).catch(err=>console.log(err));
 });
 
 /*
  内容保存
 **/
-router.post('/contentAdd',(req, res)=>{
-  console.log(req.body);
+router.post('/content/add',(req, res)=>{
+  //console.log(req.body);
   let contentData = req.body || '',
       _categoryName = contentData.categoryName,
       title = contentData.title,
       shortDes = contentData.shortDes,
-      _content = contentData.content;
+      _content = contentData.content,
+      userObj = req.signedCookies.userInfo && JSON.parse(req.signedCookies.userInfo),
+      userId = userObj.uid;
   if(!_categoryName || !title || !shortDes || !_content){
     responseData.code = -1;
     responseData.msg = '信息不完善，请重新填写！';
@@ -282,6 +281,7 @@ router.post('/contentAdd',(req, res)=>{
       return new Content({
                category: _categoryName,
                title: title,
+               user: userId,
                description: shortDes,
                content: _content
              }).save();
@@ -292,7 +292,7 @@ router.post('/contentAdd',(req, res)=>{
              res.json(responseData);
              return;
            }
-         });
+         }).catch(err=>console.log(err));
     }).catch(err=>console.log(err));
 });
 
@@ -306,8 +306,8 @@ router.get('/content',(req, res)=>{
   responseData.pagination.pageSize = limit;
   Content.count().then(totalCount=>{
     responseData.pagination.total = totalCount;
-  });
-  Content.find().sort({_id: -1}).limit(limit).skip(skip).populate().then((content)=>{
+  }).catch(err=>console.log(err));
+  Content.find().sort({_id: -1}).limit(limit).skip(skip).populate(['user']).then((content)=>{
     responseData.data = content;
     res.send(responseData);
   }).catch(err=>console.log(err));
@@ -318,13 +318,101 @@ router.get('/content',(req, res)=>{
 **/
 router.get('/content/edit',(req,res)=>{
   let id = req.query.id || '';
-  Category.find({
-
-  }).then(categories=>{
-
-  });
+  Content.findOne({
+    _id: id
+  }).then(content=>{
+    if(content){
+      res.send(content);
+    }
+  }).catch(err=>console.log(err));
+});
+/*
+内容修改保存
+**/
+router.post('/content/edit',(req, res)=>{
+  let contentId = req.body.contentId || '',
+      categoryName = req.body.categoryName || '',
+      title = req.body.title || '',
+      shortDes = req.body.shortDes || '',
+      content = req.body.content || '';
+  if(!categoryName || !title || !shortDes || !content || !contentId){
+    responseData.code = -1;
+    responseData.msg = '信息不完善，请重新填写！';
+    res.json(responseData);
+    return;
+  }
+  Content.findOne({
+    _id: contentId
+  }).then(contentData =>{
+    if(!contentData){
+      responseData.code = -2;
+      responseData.msg = '文章不存在，请重新操作';
+      res.json(responseData);
+      return;
+    }else{
+      Category.findOne({
+        name: categoryName
+      }).then(_category =>{
+        if(!_category){
+          responseData.code = -3;
+          responseData.msg = '分类不存在，请重新操作';
+          res.json(responseData);
+          return;
+        }
+        return Content.find({
+          _id: {$ne: contentId},
+          title: title,
+          category: categoryName
+        }).then(data=>{
+          if(data.length != 0){
+            responseData.code = -4;
+            responseData.msg = '数据库中该分类下已经有了该标题的文章';
+            res.json(responseData);
+            return;
+          }
+          return Content.update({
+              _id: contentId
+           },{
+              category: categoryName,
+              title: title,
+              content: content,
+              description: shortDes
+            }).then(()=>{
+              responseData.code = 1;
+              responseData.msg = '修改成功';
+              res.json(responseData);
+              return;
+            }).catch(err=>console.log(err));
+        }).catch(err=>console.log(err))
+      }).catch(err=>console.log(err));
+    }
+  }).catch(err=>console.log(err));
 });
 
-
+/*
+内容删除
+ */
+router.get('/content/del',(req,res)=>{
+  let contentId = req.query.id || '';
+  Content.findOne({
+    _id: contentId
+  }).then(content=>{
+    if(!content){
+      responseData.code = -1;
+      responseData.msg = '要删除的文章不存在';
+      res.json(responseData);
+      return;
+    }else{
+      Content.remove({
+        _id: contentId
+      }).then(()=>{
+        responseData.code = 1;
+        responseData.msg = '删除成功';
+        res.json(responseData);
+        return;
+      }).catch(err=>console.log(err));
+    }
+  }).catch(err=>console.log(err));
+});
 
 module.exports = router;

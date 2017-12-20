@@ -13,14 +13,16 @@ export default class AdminAside extends Component {
     };
     this.handleSelectKey = this.handleSelectKey.bind(this);
   }
-  componentDidMount(){
+  componentWillMount(){
     let url = location.pathname,
-          current = url.split('/admin')[1];
+        current = url.split('/admin')[1];
     //console.log(current.length);
-    if(current.length == 0){
+    if(current.length == 1){
       current = '/userInfo';
     }else if(current =='/categoryEdit'){
       current = '/category';
+    }else if(current === '/contentEdit'){
+      current = '/content';
     }
     this.setState({
       currentUrl: current

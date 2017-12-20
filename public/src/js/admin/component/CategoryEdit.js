@@ -44,7 +44,9 @@ class CategoryEditForm extends Component {
                message.warn(data.msg);
              }else{//success
                message.success(data.msg);
-               history.go(-1);
+               let timer = setTimeout(()=>{
+                  history.go(-1);timer = null;
+               },300);
              }
             });
       }

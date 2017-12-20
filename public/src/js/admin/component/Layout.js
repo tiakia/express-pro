@@ -50,7 +50,7 @@ class AdminLayoutShowLocation extends Component {
     super(props);
     this.state = {
       activeUrl : null
-    }
+    };
   }
   componentWillMount(){
 
@@ -70,7 +70,7 @@ class AdminLayoutShowLocation extends Component {
     });
     const breadcrumbItems = [(
       <Breadcrumb.Item key="home">
-        <Link to="/">首页</Link>
+        <a href="/admin/userInfo">首页</a>
       </Breadcrumb.Item>
     )].concat(extraBreadcrumbItems);
     return(
@@ -93,7 +93,7 @@ class AdminLayoutShowLocation extends Component {
             </Footer>
           </Layout>
         </Layout>
-    )
+    );
   }
 }
 
