@@ -16,8 +16,8 @@ export default class AdminAside extends Component {
   componentWillMount(){
     let url = location.pathname,
         current = url.split('/admin')[1];
-    //console.log(current.length);
-    if(current.length == 1){
+    console.log(current.length);
+    if(current.length == 0){
       current = '/userInfo';
     }else if(current =='/categoryEdit'){
       current = '/category';

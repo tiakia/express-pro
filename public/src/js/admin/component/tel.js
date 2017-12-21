@@ -66,3 +66,10 @@
                    <Button type="primary" htmlType="submit">提交文章</Button>
                </FormItem>
            </Form>
+
+
+
+
+          <Pagination total={this.props.pagination.total}
+                    pageSize={this.props.pagination.pageSize}
+          />

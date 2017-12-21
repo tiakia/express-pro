@@ -16,10 +16,8 @@ router.use(function(req, res, next){
     //console.log(userObj);
 
     if(!userObj){
-      //res.send("请重新<a href='/'>登录</a>");
       responseData.code = -1;
       responseData.msg = '请重新登录';
-      //res.json(responseData);
       res.render('admin/error',{
         responseData: responseData
       });
@@ -55,9 +53,10 @@ router.use(function(req, res, next){
   responseData = {
     code: 0,
     msg: '',
+    data: null,
     pagination:{
       pageSize: 0,
-      data: null
+      total: 0
     }
   };
   next();
@@ -137,7 +136,6 @@ router.get('/category/add',(req, res, next)=>{
     if(newCategory){
       responseData.code = 2;
       responseData.msg = "分类添加成功";
-      responseData.url = '/category';
       res.json(responseData);
       return;
     }
@@ -307,7 +305,7 @@ router.get('/content',(req, res)=>{
   Content.count().then(totalCount=>{
     responseData.pagination.total = totalCount;
   }).catch(err=>console.log(err));
-  Content.find().sort({_id: -1}).limit(limit).skip(skip).populate(['user']).then((content)=>{
+  Content.find().sort({_id: -1}).limit(limit).skip(skip).populate(['user']).sort({addTime: -1}).then((content)=>{
     responseData.data = content;
     res.send(responseData);
   }).catch(err=>console.log(err));

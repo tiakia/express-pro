@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import { Table, Popconfirm, message } from 'antd';
 import { Link } from 'react-router-dom';
+let moment = require('moment');
 
 const contentColumns = [{
   title: 'ID',
@@ -114,7 +115,7 @@ export default class Content extends Component {
             contentId: val._id.toString(),
             contentTitle: val.title,
             user: val.user.username,
-            addTime: val.addTime,
+            addTime: moment(val.addTime).format('YYYY-MM-D, HH:mm:ss'),
             views: val.views,
             contentCat: val.category,
             shortDes: val.description
