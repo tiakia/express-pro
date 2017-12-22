@@ -1,6 +1,7 @@
 import React,{ Component } from 'react';
 import Main from './Main';
 import Aside from './Aside';
+import Views from './View';
 
 const title = "欢迎光临我的博客，I'm from React";
 
@@ -11,20 +12,25 @@ export default class Blog extends Component {
       title : title,
       nav : [],
       content: [],
-      pagination: {},
-      activeItem: 'Home'
+      pagination: {pageSize: 10, total: 50},
+      activeItem: 'Home',//设置当前导航
+      mode: 'success',//在正确和出错情况下切换
+      msg: '',//出错的提示信息
+      showContent: false,
+      viewsData: []
     };
-    this.getContent = this.getContent.bind(this);
+    this.handleGetContent = this.handleGetContent.bind(this);
     this.handleGetCategory = this.handleGetCategory.bind(this);
+    this.handleGetView = this.handleGetView.bind(this);
   }
   componentWillMount(){
-    this.getContent();
+    this.handleGetContent();
   }
-  handleGetCategory(e){
-
-    let category = e.target.innerHTML;
-    fetch(`/nav?category=${category}`,{
-      methdo: "GET",
+  //点击分类获取该分类下的文章
+  handleGetCategory(categoryName,categoryId){
+    //console.log(categoryName,categoryId);
+    fetch(`/nav?category=${categoryName}`,{
+      method: "GET",
       mode: 'cors',
       headers:{
         'Accept': 'application/json',
@@ -34,18 +40,29 @@ export default class Blog extends Component {
     }).then(response => response.json())
       .then(nav =>{
         //console.log(nav);
+        let mode = 'success',
+            msg = '';
+        if(nav.code < 0){
+          mode = 'failed';
+          msg = nav.msg;
+        }
         let content = nav.data.content,
             pagination = nav.pagination;
         this.setState({
           content: content,
           pagination: pagination,
-          activeItem: category
+          activeItem: categoryName,
+          mode : mode,
+          msg: msg,
+          showContent: false
         });
       });
   }
-  getContent(page=1){
-    fetch(`/nav?page=${page}`,{
-      methdo: "GET",
+  //内容分页
+  handleGetContent(page=1){
+
+    fetch(`/nav?page=${page}&category=${this.state.activeItem}`,{
+      method: "GET",
       mode: 'cors',
       headers:{
         'Accept': 'application/json',
@@ -62,11 +79,29 @@ export default class Blog extends Component {
           _id: '',
           name: 'Home'
         });
-        //console.log(categories);
         this.setState({
           nav: categories,
           content: content,
           pagination: pagination
+        });
+      });
+  }
+  handleGetView(contentId){
+    fetch(`/views?contentId=${contentId}`,{
+      method: 'GET',
+      mode: 'cors',
+      headers:{
+        'Accept': 'application/json',
+        "Content-type": 'application/json'
+      },
+      credentials: 'include'
+    }).then(response=> response.json())
+      .then(_data=>{
+        //console.log(_data);
+        let  _viewsData = _data.data.content;
+        this.setState({
+           showContent: true,
+           viewsData: _viewsData
         });
       });
   }
@@ -79,10 +114,19 @@ export default class Blog extends Component {
              activeItem={this.state.activeItem}
         />
         <div id="app" >
-          <Main contentData={this.state.content}
-                pagination={this.state.pagination}
-                handleGetContent={this.getContent}
-          />
+        {
+          this.state.mode === 'success' ?
+             <Main contentData={this.state.content}
+                   pagination={this.state.pagination}
+                   getContent={this.handleGetContent}
+                   getView={this.handleGetView}
+                   showContent={this.state.showContent}
+                   viewsData={this.state.viewsData}
+            /> : this.state.mode === 'failed' ?
+            <main className='failedContent left'>
+              {this.state.msg}
+            </main> : null
+        }
           <Aside/>
         </div>
         </div>
@@ -90,7 +134,7 @@ export default class Blog extends Component {
   }
 }
 
-class Header extends Component {
+export class Header extends Component {
   constructor(props){
     super(props);
   }
@@ -103,7 +147,7 @@ class Header extends Component {
   }
 }
 
-class Nav extends Component {
+export class Nav extends Component {
   constructor(props){
     super(props);
   }
@@ -114,11 +158,10 @@ class Nav extends Component {
              {
                this.props.nav.map((val, idx) => {
                  return <li key={idx}>
-                   <a onClick={(e)=>this.props.getCategory(e)}
-                      className={val.name === this.props.activeItem? 'active': null}
-                      name={val._id}
-                   >
-                            {val.name == "Home" ? "首页" : val.name}
+                           <a onClick={()=>this.props.getCategory(val.name,val._id)}
+                              className={val.name === this.props.activeItem? 'active': null}
+                           >
+                              {val.name == "Home" ? "首页" : val.name}
                           </a>
                         </li>;
                })

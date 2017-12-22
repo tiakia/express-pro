@@ -21,17 +21,13 @@ router.use((req,res,next)=>{
   }
   next();
 })
-/*首页*/
-router.get('/nav',(req, res, next)=>{
+
+/*读取通用数据*/
+router.use((req,res,next)=>{
   responseData.data = {
       categories: [],
       content: []
   };
-  let page = req.query.page || 1,
-      categoryName = req.query.category || '',
-      limit = 10,
-      skip = (page - 1) * 10;
-  console.log(categoryName);
   Category.find().then(category=>{
     if(!category){
       responseData.code = -1;
@@ -40,40 +36,64 @@ router.get('/nav',(req, res, next)=>{
       return;
     }
     responseData.data.categories = category;
-    if(categoryName.length !=0){
-      return Content.count({"category":{"$in":categoryName}});
-    }else{
-      return Content.count();
-    }
-  }).then(count=>{
+  });
+  next();
+});
+
+/*首页*/
+router.get('/nav',(req, res, next)=>{
+
+  let page = req.query.page || 1,
+      categoryName = req.query.category === 'Home' ? '' : req.query.category,
+      limit = 5,
+      skip = (page - 1) * limit,
+      where = categoryName.length != 0 ? {"category":{"$in":categoryName}} : '';
+  Content.count(where).then(count=>{
     if(!count){
       responseData.code = -2;
-      responseData.msg = '数据总数查找失败';
+      responseData.msg = '数据总数查找失败 或 没有查找到相关数据';
       res.json(responseData);
       return;
     }
     responseData.pagination.total = count;
     responseData.pagination.pageSize = limit;
-    let skip = (page - 1)* limit;
-    if(categoryName.length != 0){
-      return  Content.find({"category":{"$in":categoryName}}).sort({_id: -1}).limit(limit).skip(skip).populate(['user']).sort({addTime: -1});
-    }else{
-      return  Content.find().sort({_id: -1}).limit(limit).skip(skip).populate(['user']).sort({addTime: -1});
-    }
-  }).then((content)=>{
-    if(!content){
-      responseData.code = -3;
-      responseData.msg = '文章查找失败';
-      res.json(responseData);
-      return;
-    }
-    responseData.data.content = content;
-    res.json(responseData);
-    return;
+    Content.find(where).limit(limit).skip(skip).populate(['user']).sort({addTime: -1})
+     .then((content)=>{
+        if(!content){
+          responseData.code = -3;
+          responseData.msg = '文章查找失败 或 没有查找到相关数据';
+          res.json(responseData);
+          return;
+        }
+        responseData.data.content = content;
+        res.json(responseData);
+        return;
+     }).catch(err=>console.log(err));
   }).catch(err=>console.log(err));
-})
+});
 
 /*读取内容*/
+router.get('/views',(req,res)=>{
+  let contentId = req.query.contentId || '';
+  if(contentId.length == 0){
+    responseData.code = -1;
+    responseData.msg = '请重试';
+    res.json(responseData);
+    return;
+  }
+  Content.findOne({
+    _id: contentId
+  }).populate(['user']).then(contentData=>{
+    console.log(contentData);
+    contentData.views++;
+    contentData.save();
 
+    responseData.code = 1;
+    responseData.msg = '获取详情成功';
+    responseData.data.content = contentData;
+    res.json(responseData);
+    return;
+  }).catch(err=>console.log(err))
+});
 
 module.exports = router;

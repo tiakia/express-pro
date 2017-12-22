@@ -71,6 +71,22 @@ nav{
         height: 500px;
     }
 }
+.flex-center{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.failedContent{
+    @extend .flex-center;
+    height: 200px;
+    background:{
+        color: #fff;
+    }
+    font:{
+        size: 14px;
+    }
+}
 
 article.item{
     background-color: #fff;
@@ -223,6 +239,137 @@ article.item{
         a{
             color: $other-color;
             margin-left: 5px;
+        }
+    }
+}
+
+/*Comments*/
+.space-between{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.comment-model{
+    margin:{
+        top: 20px;
+    }
+    .comment-header{
+        @extend .space-between;
+        strong{
+            font:{
+                size: 16px;
+            }
+        }
+        span{
+            font:{
+                size: 14px;
+            }
+            .comment-count{
+                color: $main-color;
+            }
+        }
+    }
+    .comment-center{
+        .comment-user{
+            font:{
+                size: 14px;
+                weight: bold;
+            }
+            display: inline-block;
+            margin:{
+                top: 8px;
+                bottom: 8px;
+            }
+            color: $other-color;
+        }
+        .comment-submit{
+            @extend .flex-center;
+            margin:{
+                bottom: 8px;
+            }
+            box-sizing: border-box;
+            input{
+                height: 48px;
+                width: 80%;
+                padding:{
+                    left: 8px;
+                }
+                border:{
+                    top-left-radius: 5px;
+                    bottom-left-radius: 5px;
+                    width: 2px;
+                    style: solid;
+                    color: $main-color;
+                }
+            }
+            button{
+                height: 50px;
+                width: 15%;
+                color: #fff;
+                margin:{
+                    left: -4px;
+                }
+                padding: 5px 10px;
+                border:{
+                    top-right-radius: 5px;
+                    bottom-right-radius: 5px;
+                    top-left-radius: 0;
+                    bottom-left-radius: 0;
+                }
+                background:{
+                    color: $main-color;
+                }
+            }
+        }
+        p{
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background:{
+                color: rgba(255,0,0,.6);
+            }
+            color: #fff;
+            border:{
+                radius: 5px;
+            }
+            margin:{
+                bottom: 8px;
+            }
+        }
+    }
+    .comment-footer{
+        .no-comment{
+            font:{
+                size: 14px;
+            }
+        }
+        .comment-data{
+            border: 1px solid #ddd;
+            padding:{
+                left: 10px;
+                right: 10px;
+            }
+            margin:{
+                top: 5px;
+            }
+            .comment-item{
+                .comment-item-top{
+                    @extend .space-between;
+                    font-size: 14px;
+                    margin:{
+                        top: 8px;
+                    }
+                }
+            }
+            .comment-item-data{
+                margin:{
+                    top: 15px;
+                    bottom: 15px;
+                }
+
+            }
         }
     }
 }

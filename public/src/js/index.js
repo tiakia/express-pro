@@ -9,6 +9,6 @@ let rootElement = document.getElementById('root');
 
 render((
     <BrowserRouter>
-        <Blog/>
+         <Blog/>
     </BrowserRouter>
 ),rootElement);
