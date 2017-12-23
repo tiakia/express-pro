@@ -41,11 +41,11 @@ router.use((req,res,next)=>{
 });
 
 /*首页*/
-router.get('/nav',(req, res, next)=>{
+router.get('/main',(req, res, next)=>{
 
   let page = req.query.page || 1,
       categoryName = req.query.category === 'Home' ? '' : req.query.category,
-      limit = 5,
+      limit = 2,
       skip = (page - 1) * limit,
       where = categoryName.length != 0 ? {"category":{"$in":categoryName}} : '';
   Content.count(where).then(count=>{
@@ -84,7 +84,7 @@ router.get('/views',(req,res)=>{
   Content.findOne({
     _id: contentId
   }).populate(['user']).then(contentData=>{
-    console.log(contentData);
+    //console.log(contentData);
     contentData.views++;
     contentData.save();
 

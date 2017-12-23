@@ -145,6 +145,7 @@ export default class Aside extends Component{
             identity: user_info.identity
           };
           localStorage.setItem('userInfo',JSON.stringify(user_info_data));
+          history.go(0);
         }
         this.setState({
           msg: data.msg,
@@ -211,6 +212,7 @@ export default class Aside extends Component{
           this.setState({
             mode: 'login'
           });
+          history.go(0);
         }else{
           alert('请稍后重试');
         }

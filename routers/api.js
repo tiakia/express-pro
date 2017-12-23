@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('./../models/User.js');
+var Content = require('./../models/Content.js');
 
 //统一返回格式
 let responseData;
@@ -142,6 +143,37 @@ router.get('/logout',(req, res)=>{
   responseData.code = 1;
   responseData.msg = "退出成功";
   res.json(responseData);
+});
+
+/*评论提交*/
+router.post('/comment',(req,res,next)=>{
+  //内容Id
+  let contentId = req.body.contentId || '',
+      userObj = req.signedCookies.userInfo && JSON.parse(req.signedCookies.userInfo),
+      _username = userObj.username,
+      _content = req.body.content;
+   let postData = {
+     username: _username,
+     postTime: new Date(),
+     content: _content
+   }
+  Content.findOne({_id: contentId}).populate(['user']).then(content=>{
+    if(!content){
+      responseData.code = -1;
+      responseData.msg = '内容查找失败';
+      res.json(responseData);
+      return;
+    }
+    content.comments.push(postData);
+    content.save()
+      .then((newContent)=>{
+         responseData.msg = '评论成功';
+         responseData.code = '1';
+         responseData.content = newContent;
+         res.json(responseData);
+         return;
+      });
+  }).catch(err=>console.log(err));
 });
 
 module.exports = router;

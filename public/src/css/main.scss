@@ -273,7 +273,7 @@ article.item{
     .comment-center{
         .comment-user{
             font:{
-                size: 14px;
+                size: 20px;
                 weight: bold;
             }
             display: inline-block;
@@ -287,13 +287,15 @@ article.item{
             @extend .flex-center;
             margin:{
                 bottom: 8px;
+                top: 8px;
             }
             box-sizing: border-box;
-            input{
+            textArea{
                 height: 48px;
                 width: 80%;
                 padding:{
                     left: 8px;
+                    right: 8px;
                 }
                 border:{
                     top-left-radius: 5px;
@@ -335,6 +337,7 @@ article.item{
                 radius: 5px;
             }
             margin:{
+                top: 8px;
                 bottom: 8px;
             }
         }
@@ -346,13 +349,12 @@ article.item{
             }
         }
         .comment-data{
-            border: 1px solid #ddd;
             padding:{
                 left: 10px;
                 right: 10px;
             }
             margin:{
-                top: 5px;
+                top: 15px;
             }
             .comment-item{
                 .comment-item-top{
@@ -362,13 +364,27 @@ article.item{
                         top: 8px;
                     }
                 }
+                padding:{
+                    top: 5px;
+                    bottom: 5px;
+                    left: 10px;
+                    right: 10px;
+                }
+                border:2px solid $main-color;
+                margin:{
+                    top: 3px;
+                }
             }
             .comment-item-data{
                 margin:{
                     top: 15px;
                     bottom: 15px;
                 }
-
+                color: #000;
+                font:{
+                    size: 15px;
+                    weight: bold;
+                }
             }
         }
     }
