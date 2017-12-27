@@ -13,7 +13,10 @@ router.use((req,res,next)=>{
   responseData = {
     code: 0,
     msg: '',
-    data: null,
+    data:  {
+      categories: [],
+      content: []
+    },
     pagination: {
       pageSize: 0,
       total: 0
@@ -23,11 +26,7 @@ router.use((req,res,next)=>{
 })
 
 /*读取通用数据*/
-router.use((req,res,next)=>{
-  responseData.data = {
-      categories: [],
-      content: []
-  };
+router.get('/nav',(req,res,next)=>{
   Category.find().then(category=>{
     if(!category){
       responseData.code = -1;
@@ -35,9 +34,11 @@ router.use((req,res,next)=>{
       res.json(responseData);
       return;
     }
+    responseData.code = 1;
     responseData.data.categories = category;
+    res.json(responseData);
+    return;
   });
-  next();
 });
 
 /*首页*/

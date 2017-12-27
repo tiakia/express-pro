@@ -152,6 +152,12 @@ router.post('/comment',(req,res,next)=>{
       userObj = req.signedCookies.userInfo && JSON.parse(req.signedCookies.userInfo),
       _username = userObj.username,
       _content = req.body.content;
+  if(!_content){
+    responseData.code = -1;
+    responseData.msg = '请输入评论内容';
+    res.json(responseData);
+    return;
+  }
    let postData = {
      username: _username,
      postTime: new Date(),

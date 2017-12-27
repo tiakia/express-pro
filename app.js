@@ -111,8 +111,8 @@ app.use(cookieParser('tiankai'));
 
 app.use(history({
   rewrites: [
-    { from: /^\/$/,to: '/'},
-    { from: /^\/admin\/*/, to: '/admin'}
+    { from: /^\/((?!admin)\w)*(\/\w*)*$/,to: '/'},
+    { from: /^\/admin(\/\w*)*$/, to: '/admin'}
   ]
 }));
 

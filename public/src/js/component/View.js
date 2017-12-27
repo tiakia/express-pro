@@ -6,47 +6,166 @@
 
 import React, { Component } from 'react';
 import { Item } from './Main';
+import { notification, Pagination } from 'antd';
 var moment = require('moment');
 
 export default class View extends Component {
   constructor(props){
     super(props);
     this.state = {
-
+      contentData: [],//当前文章数据
+      commentsArray: [],//所有评论数据
+      commentVal: null,//读取评论数据
+      userArray: [],//用户数组
+      showContent: true,//显示文章内容函数阅读更多按钮
+      currentPage: 1,//评论的当前页码
+      pageSize: 5 //每页显示的数据条数
     };
+    this.handleGetView = this.handleGetView.bind(this);
+    this.handleCommentVal =  this.handleCommentVal.bind(this);
+    this.handleCommentsSubmit = this.handleCommentsSubmit.bind(this);
+    this.renderComments = this.renderComments.bind(this);
+    this.changePage = this.changePage.bind(this);
   }
   componentWillMount(){
 
   }
   componentDidMount(){
-
+    this.handleGetView();
   }
   componentWillReceiveProps(nextProps){
 
   }
+  handleGetView(){
+    //console.log(location.search.split('?')[1].split("=")[1]);
+    let contentId = location.search.split('?')[1].split("=")[1];
+    fetch(`/views?contentId=${contentId}`,{
+      method: 'GET',
+      mode: 'cors',
+      headers:{
+        'Accept': 'application/json',
+        "Content-type": 'application/json'
+      },
+      credentials: 'include'
+    }).then(response=> response.json())
+      .then(_data=>{
+        //console.log(_data);
+       var _viewsData = _data.data.content;
+        this.setState({
+           contentData: _viewsData,
+           userArray: _viewsData.user,
+           commentsArray: _viewsData.comments.reverse()
+        });
+      });
+  }
+  //评论提交
+  handleCommentsSubmit(contentId){
+     var _commentVal = this.state.commentVal;
+      var _data = JSON.stringify({
+                 contentId: contentId,
+                 content: _commentVal
+      });
+      var newContent = [];
+       fetch('/api/comment',{
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          "Accept": 'application/json',
+          "Content-type": 'application/json'
+        },
+        credentials: 'include',
+        body: _data
+      }).then(response=>response.json())
+        .then(data=>{
+          if(data.code>0){
+            notification['success']({
+              message: data.msg
+            });
+            _commentVal = '';
+            newContent = data.content.comments.reverse();
+            //console.log(newContent);
+            this.setState({
+                commentVal: _commentVal,
+                commentsArray: newContent
+            });
+          }else{
+            notification['error']({
+              message: data.msg
+            });
+          }
+        });
+  }
+  //获取评论内容 onChange 事件
+  handleCommentVal(e){
+    let _commentVal = e.target.value;
+    this.setState({
+      commentVal: _commentVal
+    });
+  }
+  renderComments(comments){//渲染评论的
+    var perpage = this.state.pageSize,
+        page = this.state.currentPage || 1,
+        start = (page - 1)* perpage,
+        end = start + perpage;
+    return comments.map((val,item)=>{
+      if(item >=start && item < end){
+        //console.log(val);
+        return(
+          <div className="comment-item" key={item}>
+            <p className="comment-item-top">
+              <span className="comment-item-user">
+                 {val.username}
+              </span>
+              <span className="comment-item-time">
+               {
+                  moment(val.postTime).format('YYYY-MM-D, HH:mm:ss a')
+               }
+              </span>
+            </p>
+            <div className="comment-item-data">
+               {val.content}
+            </div>
+         </div>
+        )
+      }
+    });
+  }
+  changePage(page){//处理页码变化的
+    //console.log(page);
+    this.setState({
+      currentPage: page
+    });
+  }
   render(){
-    const _content = this.props.contentData;
-    //console.log(_content);
+    const _content = this.state.contentData;
     return(
       <main className="left">
            <Item
                key={_content._id}
                title={_content.title}
-               author={_content.user.username}
+               author={this.state.userArray.username}
                addTime={_content.addTime}
                views={_content.views}
                shortDes={_content.description}
-               showContent={true}
+               showContent={this.state.showContent}
                _contentData={_content.content}
-               commentsNum={this.props.commentsArray.length}
+               commentsNum={this.state.commentsArray.length}
             />
            <Comments
-             commentsSubmit={this.props.commentsSubmit}
+             commentsSubmit={this.handleCommentsSubmit}
              contentId={_content._id}
-             commentChangeVal={this.props.commentChangeVal}
-             commentData={this.props.commentData}
-             commentsArray={this.props.commentsArray}
-           />
+             commentChangeVal={this.handleCommentVal}
+             commentData={this.state.commentData}
+             commentsArray={this.state.commentsArray}
+             renderComments={this.renderComments}
+          />
+          <div className='comments-page right'>
+          <Pagination total={this.state.commentsArray.length}
+                      pageSize={this.state.pageSize}
+                      onChange={this.changePage}
+                      current={this.state.currentPage}
+          />
+        </div>
       </main>
     )
   }
@@ -69,6 +188,9 @@ class Comments extends Component {
       });
     }
   }
+  componentWillReceiveProps(nextProps){
+
+  }
   render(){
     const contentId = this.props.contentId;
     return(
@@ -88,11 +210,7 @@ class Comments extends Component {
                   </textarea>
                     <button onClick={()=>this.props.commentsSubmit(contentId)}>提交</button>
                  </div>
-                {
-                  this.props.commentData.isEmpty ?
-                    <p>请重新输入评论内容</p> :
-                    null
-                }
+
                 </div> :
                 <p>你还没有登录，请先登录！</p>
              }
@@ -102,24 +220,9 @@ class Comments extends Component {
              this.props.commentsArray.length != 0 ?
               <div className="comment-data">
                  {
-                     this.props.commentsArray.map((val,item)=>{
-                         return   <div className="comment-item" key={item}>
-                                     <p className="comment-item-top">
-                                      <span className="comment-item-user">
-                                          {val.username}
-                                      </span>
-                                      <span className="comment-item-time">
-                                          {
-                                      moment(val.postTime).format('YYYY-MM-D, HH:mm:ss a')
-                                          }
-                                      </span>
-                                    </p>
-                                    <div className="comment-item-data">
-                                        {val.content}
-                                    </div>
-                                   </div>
-                     })
+                   this.props.renderComments(this.props.commentsArray)
                  }
+
               </div> :
               <span className="no-comment">还没有留言</span>
            }

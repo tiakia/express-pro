@@ -40,11 +40,11 @@ nav{
                     font:{
                         size:16px;
                     }
-                    &:hover,&.active{
+                    &:hover,&.active,&:focus{
                         border-bottom-color: $main-color;
+                        text-decoration: none;
                         cursor: pointer;
                     }
-
             }
         }
     }
@@ -244,6 +244,11 @@ article.item{
 }
 
 /*Comments*/
+.comments-page{
+    margin:{
+        bottom: 10px;
+    }
+}
 .space-between{
     display: flex;
     flex-direction: row;
